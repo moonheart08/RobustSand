@@ -38,6 +38,8 @@ namespace Template.Game
             TemplateIoC.Register();
 
             IoCManager.BuildGraph();
+            
+            factory.GenerateNetIds();
 
             // DEVNOTE: This is generally where you'll be setting up the IoCManager further, like the tile manager.
         }

@@ -31,6 +31,11 @@ namespace Template.Game
                 // Name of the configuration file in the user's data directory.
                 ConfigFileName = "config.toml",
                 
+                //SplashLogo = new ResourcePath("/path/to/splash/logo.png"),
+                
+                // Check "RobustToolbox/Resources/Textures/Logo/icon" for an example window icon set.
+                //WindowIconSet = new ResourcePath("/path/to/folder/with/window/icon/set"),
+                
                 // There are a few more options, be sure to check them all!
             });
         }
