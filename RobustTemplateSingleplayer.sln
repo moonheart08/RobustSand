@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Template.Game", "Template.Game\Template.Game.csproj", "{F2524BEF-CD40-4F05-8BB8-87102E573D03}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content.Client", "Content.Client\Content.Client.csproj", "{F2524BEF-CD40-4F05-8BB8-87102E573D03}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RobustToolbox", "RobustToolbox", "{F5F87A9D-C304-4833-B107-D666317F6931}"
 EndProject

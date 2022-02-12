@@ -1,6 +1,6 @@
 using Robust.Shared.Input;
 
-namespace Template.Game.Input;
+namespace Content.Client.Input;
 
 [KeyFunctions]
 public static class ContentKeyFunctions

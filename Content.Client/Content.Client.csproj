@@ -6,9 +6,9 @@
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\bin\Template.Game\</OutputPath> <!-- This is important for gamepack mounting purposes. -->
+    <OutputPath>..\bin\Content.Client\</OutputPath> <!-- This is important for gamepack mounting purposes. -->
     <OutputType Condition="'$(FullRelease)' != 'True'">Exe</OutputType>
-    <RootNamespace>Template.Game</RootNamespace>
+    <RootNamespace>Content.Client</RootNamespace>
   </PropertyGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.DefineConstants.targets" />
   <ItemGroup>

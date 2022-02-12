@@ -1,0 +1,7 @@
+﻿<BoxContainer xmlns="https://spacestation14.io"
+              Orientation="Vertical">
+    <MenuBar Name="EditorMenuBar"/>
+    <BoxContainer Orientation="Horizontal">
+        <ViewportContainer Name="Viewport" />
+    </BoxContainer>
+</BoxContainer>

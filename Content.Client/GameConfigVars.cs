@@ -1,12 +1,12 @@
 using Robust.Shared;
 using Robust.Shared.Configuration;
 
-namespace Template.Game;
+namespace Content.Client;
 
 // DEVNOTE: This is the same as SS14's CCVars. Except it's not named CCVars as that name is 
 // hot garbage.
 [CVarDefs]
-public sealed class GameConfigVars: CVars
+public sealed class GameConfigVars : CVars
 {
     // Declare persistent game config variables here.
     // ```
@@ -15,6 +15,12 @@ public sealed class GameConfigVars: CVars
     // ``` 
     // This is a good spot to store your database config, among other things.
 
+    /// <summary>
+    /// Enables debug menus, removes fun.
+    /// </summary>
     public static readonly CVarDef<bool>
-        DummyCVarForTemplate = CVarDef.Create("dummy.whydoineedthis", true, CVar.ARCHIVE);
+        GameDebug = CVarDef.Create("game.debug", false);
+
+    public static readonly CVarDef<string>
+        GameLocale = CVarDef.Create("game.locale", "en-US", CVar.ARCHIVE);
 }
