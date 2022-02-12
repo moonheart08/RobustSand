@@ -1,16 +1,45 @@
-﻿using Robust.Client.ResourceManagement;
+﻿using Content.Client.Editor;
+using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Maths;
+using static Robust.Client.UserInterface.StylesheetHelpers;
 
 namespace Content.Client.UI;
 
 public abstract class StylesheetBase
 {
+    public const string BaseButton = "ButtonBase";
+    
+    protected StyleBoxFlat BackgroundOuterTexture { get; }
+    protected StyleBoxFlat BackgroundInnerTexture { get; }
+    protected StyleBoxFlat BaseButtonTexture { get; }
+    
     public abstract Stylesheet Stylesheet { get; }
     protected StyleRule[] BaseRules { get; }
 
     protected StylesheetBase(IResourceCache resCache)
     {
         var notoSans12 = resCache.GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 12);
+        var buttonTex = resCache.GetTexture("/Textures/Interface/button.png");
+        
+        BackgroundOuterTexture = new StyleBoxFlat
+        {
+            BackgroundColor = new Color(0x21, 0x21, 0x26),
+        };
+        
+        BackgroundInnerTexture = new StyleBoxFlat
+        {
+            BackgroundColor = new Color(0x1b, 0x1b, 0x1f),
+        };
+        
+        BaseButtonTexture = new StyleBoxFlat
+        {
+            BackgroundColor = new Color(0x27, 0x27, 0x2e),
+            ContentMarginLeftOverride = 10,
+            ContentMarginTopOverride = 10
+        };
 
         BaseRules = new[]
         {
@@ -21,6 +50,15 @@ public abstract class StylesheetBase
                 {
                     new StyleProperty("font", notoSans12),
                 }),
+            new StyleRule(
+                new SelectorElement(typeof(Button), null, null, null),
+                new[]
+                {
+                    new StyleProperty(Button.StylePropertyStyleBox, BaseButtonTexture),
+                }),
+            Element<MenuBar>().Prop(PanelContainer.StylePropertyPanel, BackgroundOuterTexture),
+            Element<GameEditorView>().Prop(PanelContainer.StylePropertyPanel, BackgroundInnerTexture),
+            Element<PanelContainer>().Class("Background").Prop(PanelContainer.StylePropertyPanel, BackgroundInnerTexture)
         };
     }
 }
