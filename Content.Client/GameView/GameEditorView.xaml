@@ -1,0 +1,31 @@
+﻿<BoxContainer xmlns="https://spacestation14.io"
+              xmlns:ui="clr-namespace:Content.Client.UI"
+              xmlns:rendering="clr-namespace:Content.Client.Rendering"
+              Orientation="Vertical"
+              VerticalExpand="True">
+    <!--
+    <MenuBar Name="EditorMenuBar"/>
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+        
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6">
+                
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="6" Align="End">
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                    <Label Text="Zoom"/>
+                    <Slider Name="ZoomSlider" MinValue="0.1" MaxValue="4" Value="1" HorizontalExpand="True"/>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+        <LayoutContainer HorizontalExpand="True" VerticalExpand="True" Name="Layout">
+            
+        </LayoutContainer>
+    </BoxContainer>-->
+    <rendering:SimulationControl HorizontalExpand="True" VerticalExpand="True"/>
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+        <Button Name="EraseMode" Text="Erase"/>
+        <ScrollContainer>
+            <BoxContainer Name="ElementPlaceButtons" Orientation="Vertical"/>
+        </ScrollContainer>
+    </BoxContainer>
+</BoxContainer>

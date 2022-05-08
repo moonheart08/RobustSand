@@ -1,5 +1,6 @@
 using System.Globalization;
-using Content.Client.Editor;
+using Content.Client.GameView;
+using Content.Client.Maps;
 using Content.Client.UI;
 using Robust.Client;
 using Robust.Client.State;
@@ -60,6 +61,7 @@ public sealed class EntryPoint : GameClient
         _client.PlayerNameOverride = "three";
         _stateManager.RequestStateChange<GameEditorState>();
         IoCManager.Resolve<StylesheetManager>().Initialize();
+        IoCManager.Resolve<GameMapManager>().Initialize();
     }
 
     protected override void Dispose(bool disposing)

@@ -1,10 +1,10 @@
-﻿using Content.Client.Editor;
-using Robust.Client.Graphics;
+﻿using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using static Robust.Client.UserInterface.StylesheetHelpers;
+using GameEditorView = Content.Client.GameView.GameEditorView;
 
 namespace Content.Client.UI;
 
@@ -37,6 +37,15 @@ public abstract class StylesheetBase
         BaseButtonTexture = new StyleBoxFlat
         {
             BackgroundColor = new Color(0x27, 0x27, 0x2e),
+            ContentMarginLeftOverride = 4,
+            ContentMarginTopOverride = 4,
+            ContentMarginBottomOverride = 4,
+            ContentMarginRightOverride = 4,
+        };
+        
+        var flatWhite = new StyleBoxFlat
+        {
+            BackgroundColor = Color.White,
             ContentMarginLeftOverride = 10,
             ContentMarginTopOverride = 10
         };
@@ -54,11 +63,13 @@ public abstract class StylesheetBase
                 new SelectorElement(typeof(Button), null, null, null),
                 new[]
                 {
-                    new StyleProperty(Button.StylePropertyStyleBox, BaseButtonTexture),
+                    new StyleProperty(ContainerButton.StylePropertyStyleBox, BaseButtonTexture),
                 }),
             Element<MenuBar>().Prop(PanelContainer.StylePropertyPanel, BackgroundOuterTexture),
             Element<GameEditorView>().Prop(PanelContainer.StylePropertyPanel, BackgroundInnerTexture),
-            Element<PanelContainer>().Class("Background").Prop(PanelContainer.StylePropertyPanel, BackgroundInnerTexture)
+            Element<PanelContainer>().Class("Background").Prop(PanelContainer.StylePropertyPanel, BackgroundInnerTexture),
+            Element<Slider>().Prop(Slider.StylePropertyGrabber, flatWhite),
+            Element<Slider>().Prop(Slider.StylePropertyFill, flatWhite),
         };
     }
 }

@@ -1,9 +1,0 @@
-﻿<BoxContainer xmlns="https://spacestation14.io"
-              xmlns:ui="clr-namespace:Content.Client.UI"
-              Orientation="Vertical">
-    <MenuBar Name="EditorMenuBar"/>
-    <LayoutContainer HorizontalExpand="True" VerticalExpand="True" Name="Layout">
-        <!--<ui:ScalingViewport Name="Viewport" Access="Public" AlwaysRender="True"/>-->
-        <ui:ScalingViewport Name="Viewport" StyleClasses="Background" HorizontalExpand="True" VerticalExpand="True"/>
-    </LayoutContainer>
-</BoxContainer>

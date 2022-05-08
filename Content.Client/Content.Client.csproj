@@ -9,6 +9,7 @@
     <OutputPath>..\bin\Content.Client\</OutputPath> <!-- This is important for gamepack mounting purposes. -->
     <OutputType Condition="'$(FullRelease)' != 'True'">Exe</OutputType>
     <RootNamespace>Content.Client</RootNamespace>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <Import Project="..\RobustToolbox\MSBuild\Robust.DefineConstants.targets" />
   <ItemGroup>

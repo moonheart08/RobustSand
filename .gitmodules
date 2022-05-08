@@ -1,3 +1,5 @@
 [submodule "RobustToolbox"]
 	path = RobustToolbox
 	url = https://github.com/space-wizards/RobustToolbox.git
+[submodule ".\\RobustToolbox"]
+	branch = v0.8.52

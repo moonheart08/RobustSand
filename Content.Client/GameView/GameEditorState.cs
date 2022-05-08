@@ -1,10 +1,9 @@
 ﻿using Robust.Client.Graphics;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
-using Robust.Shared.Maths;
 using Robust.Shared.Timing;
 
-namespace Content.Client.Editor;
+namespace Content.Client.GameView;
 
 public sealed class GameEditorState : State
 {
@@ -17,17 +16,14 @@ public sealed class GameEditorState : State
     {
         _userInterface = IoCManager.Resolve<IUserInterfaceManager>();
         _eyeManager = IoCManager.Resolve<IEyeManager>();
-        _overlayManager = IoCManager.Resolve<IOverlayManager>();
-        _overlayManager.AddOverlay(new ViewBackgroundOverlay());
-
         _userInterface.StateRoot.AddChild(_view);
     }
 
     public override void Shutdown()
     {
-        _overlayManager.RemoveOverlay(typeof(ViewBackgroundOverlay));
         _userInterface.StateRoot.RemoveChild(_view);
     }
+    
     
     public override void FrameUpdate(FrameEventArgs args)
     {
