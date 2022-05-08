@@ -24,15 +24,18 @@ public sealed class Spawner : ParticleImplementation
         if (particle.Variable1 is <= (int)ParticleType.NONE or >= (int)ParticleType.END)
             return;
         
-        for (int relX = -1; relX < 1; relX++)
+        for (int relX = -1; relX <=1 ; relX++)
         {
-            for (int relY = -1; relY < 1; relY++)
+            for (int relY = -1; relY <= 1; relY++)
             {
                 if (_random.Prob(0.75f))
                     continue;
 
                 var offsPos = position + new Vector2i(relX, relY);
 
+                if (!sim.SimulationBounds.Contains(offsPos))
+                    continue;
+                
                 var entry = sim.GetPlayfieldEntry(offsPos);
                 
                 if (entry.Type != ParticleType.NONE)
@@ -45,6 +48,7 @@ public sealed class Spawner : ParticleImplementation
 
     public override void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
     {
-        particle.Variable1 = (int) drawnType;
+        if (drawnType is not ParticleType.NONE or ParticleType.SPAWNER)
+            particle.Variable1 = (int) drawnType;
     }
 }

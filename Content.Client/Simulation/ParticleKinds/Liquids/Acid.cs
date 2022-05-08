@@ -32,13 +32,16 @@ public sealed class Acid : ParticleImplementation
             return;
         }
 
-        for (int relX = -1; relX < 1; relX++)
+        for (int relX = -1; relX <= 1; relX++)
         {
-            for (int relY = -1; relY < 1; relY++)
+            for (int relY = -1; relY <= 1; relY++)
             {
                 if (_random.Prob(0.25f))
                     continue;
                 var offsPos = position + new Vector2i(relX, relY);
+                
+                if (!sim.SimulationBounds.Contains(offsPos))
+                    continue;
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
                 

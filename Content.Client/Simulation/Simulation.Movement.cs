@@ -10,17 +10,13 @@ public sealed partial class Simulation
     private void ProcessParticleMovement(uint id, ref Particle part)
     {
         var impl = Implementations[(int) part.Type];
-        part.Velocity += new Vector2(0, impl.RateOfGravity);
+        
         if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
         {
             var curPosI = part.Position.RoundedI();
 
             var pos = curPosI + new Vector2i(0, 1);
-            if (!SimulationBounds.Contains(pos))
-                return;
-
-            var entry = GetPlayfieldEntry(pos);
-            if (entry.Type != ParticleType.NONE)
+            if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.NONE)
             {
                 var whichFirst = _random.Prob(0.5f);
                 var liquidShiftSuccess = false;
@@ -29,14 +25,27 @@ public sealed partial class Simulation
                 {
                     liquidShiftSuccess = TryMoveParticle(id, curPosI + (whichFirst ? Vector2.UnitX : -Vector2.UnitX),
                         ref part);
+                    part.Velocity += new Vector2(whichFirst ? impl.RateOfGravity : -impl.RateOfGravity, 0);
 
                     whichFirst = !whichFirst;
                 }
             }
+            else
+            {
+                part.Velocity += new Vector2(0, impl.RateOfGravity);
+            }
         }
+        else
+        {
+            part.Velocity += new Vector2(0, impl.RateOfGravity);
+        }
+        
+        if (part.Type == ParticleType.NONE)
+            return; // Got deleted during water movement.
         
         var oldPos = part.Position;
         var newPos = part.Position + part.Velocity;
+        
         if (oldPos.RoundedI() == newPos.RoundedI())
         {
             part.Position = newPos;
@@ -45,7 +54,7 @@ public sealed partial class Simulation
 
         bool didNotCollide = false;
         var rawVelocity = (newPos - oldPos).Length;
-        if (rawVelocity < 1.5)
+        if (rawVelocity < 1.5 || !SimulationBounds.Contains(newPos.RoundedI()))
         {
             didNotCollide = TryMoveParticle(id, newPos, ref part);
         }
@@ -61,8 +70,12 @@ public sealed partial class Simulation
                 if (!didNotCollide)
                     break;
             }
+
+            newPos = acc;
         }
         
+        if (part.Type == ParticleType.NONE || !SimulationBounds.Contains(newPos.RoundedI()))
+            return;
 
         var collidee = GetPlayfieldEntry(newPos.RoundedI());
         var otherImpl = Implementations[(int)collidee.Type];
@@ -97,8 +110,13 @@ public sealed partial class Simulation
                         var oldVel = part.Velocity;
                         ref var otherPart = ref Particles[collidee.Id];
                         // TODO: Account for weight in this.
-                        otherPart.Velocity += oldVel / 2;
-                        part.Velocity = oldVel / 2;
+                        otherPart.Velocity += oldVel * (1 - impl.BounceCoefficient);
+                        var newVel = oldVel * impl.BounceCoefficient;
+                        if (otherPart.Position.X > part.Position.X)
+                            newVel.X = -newVel.X;
+                        else
+                            newVel.Y = -newVel.Y;
+                        part.Velocity = newVel;
                     }
 
                 }

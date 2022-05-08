@@ -20,6 +20,8 @@ public sealed class Water : ParticleImplementation
     public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
 
+    public override float BounceCoefficient => 0.3f;
+
     public override MovementType CanMoveThrough(ParticleImplementation other)
     {
         return other.MovementFlags.HasFlag(ParticleMovementFlag.Liquid) ? MovementType.Swap : base.CanMoveThrough(other);

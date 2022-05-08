@@ -22,6 +22,8 @@ public sealed partial class SimulationControl : Control
 
     public SimulationSystem _simSys;
 
+    public Vector2i MousePosition;
+
     private bool currentlyDrawing = false;
 
     private OwnedTexture _renderBuffer;
@@ -54,14 +56,13 @@ public sealed partial class SimulationControl : Control
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
+        var pos = args.RelativePosition.RoundedI();
+        if (!_simSys.Simulation.SimulationBounds.Contains(pos / 2))
+            return;
+        MousePosition = pos / 2;
+        
         if (currentlyDrawing)
         {
-            var pos = args.RelativePosition.RoundedI();
-            if (!_simSys.Simulation.SimulationBounds.Contains(pos / 2))
-                return;
-            
-            
-
             _simSys.Simulation.Draw(pos / 2, pos / 2 + args.Relative.RoundedI() / 2, _simSys.Placing);
         }
     }

@@ -19,6 +19,8 @@ public sealed partial class Simulation
     public Box2i SimulationBounds = Box2i.FromDimensions(Vector2i.Zero, new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1));
     public Box2i InnerSimulationBounds = Box2i.FromDimensions(new Vector2i(4, 4), new Vector2i((int)SimulationConfig.SimWidth - 5, (int)SimulationConfig.SimHeight - 5));
 
+    public uint LiveParticles { get; private set; }
+    
     private uint _lastActiveParticle = 0;
 
     public Simulation()
@@ -27,6 +29,12 @@ public sealed partial class Simulation
         Implementations = InitializeImplementations();
         _movementTable = InitializeMovementTable();
         Particles.Initialize();
+        
+        DebugTools.Assert(SimulationBounds.Contains(Vector2i.Zero));
+        DebugTools.Assert(SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1)));
+        DebugTools.Assert(!SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight)));
+        DebugTools.Assert(!SimulationBounds.Contains(-Vector2i.One));
+        
 
         for (var y = SimulationConfig.SimHeight - 16; y < (SimulationConfig.SimHeight - 5); y++)
         {
@@ -60,6 +68,7 @@ public sealed partial class Simulation
         }
 
         uint newLastActive = 0;
+        uint liveCount = 0;
         for (uint i = 0; i <= _lastActiveParticle; i++)
         {
             if (Particles[i].Type == ParticleType.NONE) 
@@ -72,7 +81,11 @@ public sealed partial class Simulation
             DebugTools.Assert(GetPlayfieldEntry(position) == entry);
             if (i > newLastActive)
                 newLastActive = i;
+
+            liveCount += 1;
         }
+
+        LiveParticles = liveCount;
 
         _lastActiveParticle = newLastActive;
     }

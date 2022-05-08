@@ -42,6 +42,9 @@ public sealed partial class Simulation
     
     public void DrawPixel(Vector2i pos, ParticleType placing)
     {
+        if (!SimulationBounds.Contains(pos))
+            return;
+        
         var entry = GetPlayfieldEntry(pos);
         if (placing == ParticleType.NONE)
         {

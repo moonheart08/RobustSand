@@ -1,8 +1,6 @@
-﻿<BoxContainer xmlns="https://spacestation14.io"
+﻿<LayoutContainer xmlns="https://spacestation14.io"
               xmlns:ui="clr-namespace:Content.Client.UI"
-              xmlns:rendering="clr-namespace:Content.Client.Rendering"
-              Orientation="Vertical"
-              VerticalExpand="True">
+              xmlns:rendering="clr-namespace:Content.Client.Rendering">
     <!--
     <MenuBar Name="EditorMenuBar"/>
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
@@ -21,12 +19,17 @@
             
         </LayoutContainer>
     </BoxContainer>-->
-    <rendering:SimulationControl Name="SimControl" HorizontalExpand="True" VerticalExpand="True"/>
-    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-        <Button Name="EraseMode" Text="Erase"/>
-        <BoxContainer Name="ElementPlaceButtons" HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal"/>
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="BaseBox">
+        <rendering:SimulationControl Name="SimControl" HorizontalExpand="True" VerticalExpand="True"/>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+            <Button Name="EraseMode" Text="Erase"/>
+            <BoxContainer Name="ElementPlaceButtons" HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal"/>
+        </BoxContainer>
+        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+            <Button Name="Pause" Text="Pause" ToggleMode="True"/>
+        </BoxContainer>
     </BoxContainer>
-    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-        <Button Name="Pause" Text="Pause" ToggleMode="True"/>
+    <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
+        <Label Text="0ms" Name="SimTickTime"/>
     </BoxContainer>
-</BoxContainer>
+</LayoutContainer>

@@ -36,6 +36,8 @@ public abstract class ParticleImplementation
     /// </summary>
     public virtual float RateOfGravity { get; } = 0.05f;
 
+    public virtual float BounceCoefficient { get; } = 0.1f;
+
     public abstract ParticleMovementFlag MovementFlags { get; }
     
     public abstract ParticlePropertyFlag PropertyFlags { get; }
