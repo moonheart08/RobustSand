@@ -96,4 +96,5 @@ public enum ParticlePropertyFlag
 {
     None = 0,
     AcidResistant = 1,
+    Solid = 2,
 }

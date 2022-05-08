@@ -13,7 +13,7 @@ public sealed class Void : ParticleImplementation
     public override Color Color => Color.Maroon;
     public override float RateOfGravity => 0.0f;
     public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.None;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant;
+    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
 
     public override MovementType CanMoveThrough(ParticleImplementation other)
     {

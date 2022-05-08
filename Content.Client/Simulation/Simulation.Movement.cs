@@ -43,14 +43,37 @@ public sealed partial class Simulation
             return;
         }
 
-        var success = TryMoveParticle(id, newPos, ref part);
+        bool didNotCollide = false;
+        var rawVelocity = (newPos - oldPos).Length;
+        if (rawVelocity < 1.5)
+        {
+            didNotCollide = TryMoveParticle(id, newPos, ref part);
+        }
+        else
+        {
+            var stepsToDo = Math.Min((int) rawVelocity, (int)SimulationConfig.MaximumCollisionSteps);
+            var delta = (newPos - oldPos) / stepsToDo;
+            var acc = oldPos;
+            for (var step = 0; step < stepsToDo; step++)
+            {
+                acc += delta;
+                didNotCollide = TryMoveParticle(id, acc, ref part);
+                if (!didNotCollide)
+                    break;
+            }
+        }
+        
 
-        if (!success)
+        var collidee = GetPlayfieldEntry(newPos.RoundedI());
+        var otherImpl = Implementations[(int)collidee.Type];
+
+        if (!didNotCollide)
         {
             if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
                 (impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
             {
                 var whichFirst = _random.Prob(0.5f);
+                var success = false;
                 for (var i = 0; i < 2 && !success && part.Type != ParticleType.NONE; i++)
                 {
                     if (whichFirst)
@@ -63,9 +86,22 @@ public sealed partial class Simulation
                     }
                     whichFirst = !whichFirst;
                 }
-                
-                if (!success)
-                    part.Velocity = Vector2.Zero;
+
+                if (!didNotCollide)
+                {
+                    
+                    if ((otherImpl.PropertyFlags & ParticlePropertyFlag.Solid) != 0)
+                        part.Velocity = Vector2.Zero;
+                    else
+                    {
+                        var oldVel = part.Velocity;
+                        ref var otherPart = ref Particles[collidee.Id];
+                        // TODO: Account for weight in this.
+                        otherPart.Velocity += oldVel / 2;
+                        part.Velocity = oldVel / 2;
+                    }
+
+                }
             }
 
             if (impl.MovementFlags == ParticleMovementFlag.None)
@@ -107,7 +143,6 @@ public sealed partial class Simulation
                 var impl = Implementations[(int) partAtNew.Type];
                 return impl.DoMovement(ref Particles[partAtNew.Id], ref part, partAtNew.Id, id, newPosition.RoundedI(),
                     part.Position.RoundedI(), this);
-                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(movement),
                     "Someone forgot to adjust movement code for their fancy new MovementType.");
