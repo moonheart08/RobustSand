@@ -48,7 +48,7 @@ public abstract class ParticleImplementation
     /// <returns>Whether or not this particle can move through the other.</returns>
     public virtual MovementType CanMoveThrough(ParticleImplementation other)
     {
-        return other.Weight < Weight ? MovementType.Swap : MovementType.Block;
+        return other.Weight > Weight ? MovementType.Swap : MovementType.Block;
     }
     
     public virtual void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
@@ -74,6 +74,12 @@ public abstract class ParticleImplementation
     public virtual void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
     {
         
+    }
+    
+    public virtual bool DoMovement(ref Particle self, ref Particle other, uint selfId, uint otherId,
+        Vector2i selfPosition, Vector2i otherPosition, Simulation sim)
+    {
+        throw new NotImplementedException();
     }
 }
 

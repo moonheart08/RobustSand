@@ -8,5 +8,6 @@ public enum ParticleType: ushort
     SPAWNER,
     WATER,
     ACID,
+    VOID,
     END,
 }

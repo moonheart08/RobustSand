@@ -84,7 +84,7 @@ public sealed partial class Simulation
         }
 
         var partAtNew = GetPlayfieldEntry(newPosition.RoundedI());
-        var movement = GetMovementType(part.Type, partAtNew.Type);
+        var movement = GetMovementType(partAtNew.Type, part.Type);
 
         switch (movement)
         {
@@ -103,6 +103,11 @@ public sealed partial class Simulation
                 swappedPart.Position = part.Position;
                 part.Position = newPosition;
                 return true;
+            case MovementType.Custom:
+                var impl = Implementations[(int) partAtNew.Type];
+                return impl.DoMovement(ref Particles[partAtNew.Id], ref part, partAtNew.Id, id, newPosition.RoundedI(),
+                    part.Position.RoundedI(), this);
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(movement),
                     "Someone forgot to adjust movement code for their fancy new MovementType.");
