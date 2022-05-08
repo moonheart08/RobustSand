@@ -7,5 +7,6 @@ public enum ParticleType: ushort
     WALL,
     SPAWNER,
     WATER,
+    ACID,
     END,
 }

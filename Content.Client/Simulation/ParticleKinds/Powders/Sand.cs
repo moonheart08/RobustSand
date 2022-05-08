@@ -11,5 +11,6 @@ public sealed class Sand : ParticleImplementation
     public override string Description => "A somewhat heavy dust.";
     public override byte Weight => 64;
     public override Color Color => Color.SandyBrown;
-    public override ParticleMovementProperty MovementProperties => ParticleMovementProperty.Spread;
+    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Spread;
+    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
 }

@@ -11,6 +11,30 @@ public sealed partial class Simulation
     {
         var impl = Implementations[(int) part.Type];
         part.Velocity += new Vector2(0, impl.RateOfGravity);
+        if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
+        {
+            var curPosI = part.Position.RoundedI();
+
+            var pos = curPosI + new Vector2i(0, 1);
+            if (!SimulationBounds.Contains(pos))
+                return;
+
+            var entry = GetPlayfieldEntry(pos);
+            if (entry.Type != ParticleType.NONE)
+            {
+                var whichFirst = _random.Prob(0.5f);
+                var liquidShiftSuccess = false;
+
+                for (var i = 0; i < 2 && !liquidShiftSuccess && part.Type != ParticleType.NONE; i++)
+                {
+                    liquidShiftSuccess = TryMoveParticle(id, curPosI + (whichFirst ? Vector2.UnitX : -Vector2.UnitX),
+                        ref part);
+
+                    whichFirst = !whichFirst;
+                }
+            }
+        }
+        
         var oldPos = part.Position;
         var newPos = part.Position + part.Velocity;
         if (oldPos.RoundedI() == newPos.RoundedI())
@@ -23,8 +47,8 @@ public sealed partial class Simulation
 
         if (!success)
         {
-            if ((impl.MovementProperties & ParticleMovementProperty.Spread) != 0 || 
-                (impl.MovementProperties & ParticleMovementProperty.Liquid) != 0)
+            if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
+                (impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
             {
                 var whichFirst = _random.Prob(0.5f);
                 for (var i = 0; i < 2 && !success && part.Type != ParticleType.NONE; i++)
@@ -44,7 +68,7 @@ public sealed partial class Simulation
                     part.Velocity = Vector2.Zero;
             }
 
-            if (impl.MovementProperties == ParticleMovementProperty.None)
+            if (impl.MovementFlags == ParticleMovementFlag.None)
             {
                 part.Velocity = Vector2.Zero;
             }

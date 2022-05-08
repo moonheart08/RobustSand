@@ -15,7 +15,8 @@ public sealed class Spawner : ParticleImplementation
     public override byte Weight => 255;
     public override Color Color => Color.Yellow;
     public override float RateOfGravity => 0;
-    public override ParticleMovementProperty MovementProperties => ParticleMovementProperty.None;
+    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.None;
+    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant;
 
     public override void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
     {

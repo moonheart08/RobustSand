@@ -36,7 +36,9 @@ public abstract class ParticleImplementation
     /// </summary>
     public virtual float RateOfGravity { get; } = 0.05f;
 
-    public abstract ParticleMovementProperty MovementProperties { get; }
+    public abstract ParticleMovementFlag MovementFlags { get; }
+    
+    public abstract ParticlePropertyFlag PropertyFlags { get; }
 
     /// <summary>
     /// Whether or not this particle can move through the given other particle.
@@ -76,9 +78,16 @@ public abstract class ParticleImplementation
 }
 
 [Flags]
-public enum ParticleMovementProperty
+public enum ParticleMovementFlag
 {
     None = 0,
     Spread = 1,
     Liquid = 2,
+}
+
+[Flags]
+public enum ParticlePropertyFlag
+{
+    None = 0,
+    AcidResistant = 1,
 }
