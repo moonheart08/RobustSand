@@ -38,6 +38,8 @@ public abstract class ParticleImplementation
 
     public virtual float BounceCoefficient { get; } = 0.1f;
 
+    public virtual float MaximumVelocity { get; } = 4.0f;
+
     public abstract ParticleMovementFlag MovementFlags { get; }
     
     public abstract ParticlePropertyFlag PropertyFlags { get; }
@@ -74,6 +76,17 @@ public abstract class ParticleImplementation
     }
 
     public virtual void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
+    {
+        
+    }
+
+    public virtual void ChangedType(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType oldType)
+    {
+        
+    }
+
+    public virtual void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition,
+        Vector2i firePosition, Simulation sim)
     {
         
     }

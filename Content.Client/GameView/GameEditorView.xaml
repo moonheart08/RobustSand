@@ -27,6 +27,7 @@
         </BoxContainer>
         <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
             <Button Name="Pause" Text="Pause" ToggleMode="True"/>
+            <Button Name="Zoom" Text="Zoom x2" ToggleMode="True"/>
         </BoxContainer>
     </BoxContainer>
     <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">

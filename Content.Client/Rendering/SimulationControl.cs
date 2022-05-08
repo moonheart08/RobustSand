@@ -1,4 +1,5 @@
-﻿using Robust.Client.UserInterface;
+﻿using System.Threading.Tasks;
+using Robust.Client.UserInterface;
 using Content.Client.Simulation;
 using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
@@ -57,13 +58,13 @@ public sealed partial class SimulationControl : Control
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         var pos = args.RelativePosition.RoundedI();
-        if (!_simSys.Simulation.SimulationBounds.Contains(pos / 2))
+        if (!_simSys.Simulation.SimulationBounds.Contains(pos))
             return;
-        MousePosition = pos / 2;
+        MousePosition = pos;
         
         if (currentlyDrawing)
         {
-            _simSys.Simulation.Draw(pos / 2, pos / 2 + args.Relative.RoundedI() / 2, _simSys.Placing);
+            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), _simSys.Placing);
         }
     }
 
@@ -79,7 +80,7 @@ public sealed partial class SimulationControl : Control
     {
         base.Draw(handle);
         var rect = UIBox2
-            .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale) * 2);
+            .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
         handle.DrawTextureRect(_renderBuffer, rect);
         MinSize = rect.Size;
     }

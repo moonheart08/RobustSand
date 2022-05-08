@@ -9,5 +9,8 @@ public enum ParticleType: ushort
     WATER,
     ACID,
     VOID,
+    FIRE,
+    SMOKE,
+    WOOD,
     END,
 }

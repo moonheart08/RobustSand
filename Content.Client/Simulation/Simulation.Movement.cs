@@ -10,12 +10,12 @@ public sealed partial class Simulation
     private void ProcessParticleMovement(uint id, ref Particle part)
     {
         var impl = Implementations[(int) part.Type];
-        
+
         if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
         {
             var curPosI = part.Position.RoundedI();
 
-            var pos = curPosI + new Vector2i(0, 1);
+            var pos = curPosI + (impl.RateOfGravity >= 0 ?  new Vector2i(0, 1) : new Vector2i(0, -1));
             if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.NONE)
             {
                 var whichFirst = _random.Prob(0.5f);
@@ -39,6 +39,8 @@ public sealed partial class Simulation
         {
             part.Velocity += new Vector2(0, impl.RateOfGravity);
         }
+        
+        part.Velocity = part.Velocity.ClampMagnitude(impl.MaximumVelocity);
         
         if (part.Type == ParticleType.NONE)
             return; // Got deleted during water movement.
@@ -116,7 +118,7 @@ public sealed partial class Simulation
                             newVel.X = -newVel.X;
                         else
                             newVel.Y = -newVel.Y;
-                        part.Velocity = newVel;
+                        part.Velocity = newVel.ClampMagnitude(impl.MaximumVelocity);
                     }
 
                 }

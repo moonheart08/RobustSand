@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
@@ -20,6 +21,7 @@ public sealed class SimulationSystem : EntitySystem
         SimStopWatch.Restart();
         if (!SimPaused)
             Simulation.RunFrame();
+
         SimTickTime = SimStopWatch.Elapsed;
     }
 }

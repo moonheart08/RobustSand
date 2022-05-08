@@ -6,6 +6,7 @@ using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.XAML;
+using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
 
@@ -35,6 +36,11 @@ public sealed partial class GameEditorView : LayoutContainer
         EraseMode.OnPressed += args =>
         {
             _simSys.Placing = ParticleType.NONE;
+        };
+        
+        Zoom.OnToggled += args =>
+        {
+            IoCManager.Resolve<IConfigurationManager>().SetCVar("display.uiScale", args.Pressed ? 2.0f : 1.0f);
         };
 
         foreach (var impl in _simSys.Simulation.Implementations)
