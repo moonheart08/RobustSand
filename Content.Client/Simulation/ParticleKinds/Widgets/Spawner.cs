@@ -41,4 +41,9 @@ public sealed class Spawner : ParticleImplementation
             }
         }
     }
+
+    public override void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
+    {
+        particle.Variable1 = (int) drawnType;
+    }
 }

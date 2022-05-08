@@ -1,3 +1,4 @@
+using Content.Client.Simulation;
 using Content.Client.UI;
 
 namespace Content.Client;

@@ -7,11 +7,11 @@ public static class SimulationConfig
     /// <summary>
     /// The width of the simulation playfield.
     /// </summary>
-    public const uint SimWidth = 512;
+    public const uint SimWidth = 384;
     /// <summary>
     /// The height of the simulation playfield.
     /// </summary>
-    public const uint SimHeight = 512;
+    public const uint SimHeight = 384;
 
     /// <summary>
     /// The calculated area of the simulation playfield.

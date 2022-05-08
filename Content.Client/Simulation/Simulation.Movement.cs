@@ -16,21 +16,6 @@ public sealed partial class Simulation
         if (oldPos.RoundedI() == newPos.RoundedI())
         {
             part.Position = newPos;
-            if (impl.MovementProperties.HasFlag(ParticleMovementProperty.Liquid))
-            {
-                var whichFirst = _random.Prob(0.5f);
-                for (var i = 0; i < 2; i++)
-                {
-                    if (whichFirst)
-                    {
-                        TryMoveParticle(id, newPos + Vector2.UnitX, ref part);
-                    }
-                    else
-                    {
-                        TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
-                    }
-                }
-            }
             return;
         }
 
@@ -38,11 +23,11 @@ public sealed partial class Simulation
 
         if (!success)
         {
-            if (impl.MovementProperties.HasFlag(ParticleMovementProperty.Spread) || 
-                impl.MovementProperties.HasFlag(ParticleMovementProperty.Liquid))
+            if ((impl.MovementProperties & ParticleMovementProperty.Spread) != 0 || 
+                (impl.MovementProperties & ParticleMovementProperty.Liquid) != 0)
             {
                 var whichFirst = _random.Prob(0.5f);
-                for (var i = 0; i < 2 || success; i++)
+                for (var i = 0; i < 2 && !success && part.Type != ParticleType.NONE; i++)
                 {
                     if (whichFirst)
                     {
@@ -52,10 +37,11 @@ public sealed partial class Simulation
                     {
                         success = TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
                     }
-                    
-                    if (!success)
-                        part.Velocity = Vector2.Zero;
+                    whichFirst = !whichFirst;
                 }
+                
+                if (!success)
+                    part.Velocity = Vector2.Zero;
             }
 
             if (impl.MovementProperties == ParticleMovementProperty.None)
@@ -65,9 +51,9 @@ public sealed partial class Simulation
         }
     }
 
-    private bool TryMoveParticle(uint id, Vector2 newPosition, ref Particle part)
+    public bool TryMoveParticle(uint id, Vector2 newPosition, ref Particle part)
     {
-        if (!_simBounds.Contains(newPosition.RoundedI()))
+        if (!SimulationBounds.Contains(newPosition.RoundedI()))
         {
             DeleteParticle(id, part.Position.RoundedI(), ref part);
             return true;

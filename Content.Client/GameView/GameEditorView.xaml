@@ -21,11 +21,12 @@
             
         </LayoutContainer>
     </BoxContainer>-->
-    <rendering:SimulationControl HorizontalExpand="True" VerticalExpand="True"/>
+    <rendering:SimulationControl Name="SimControl" HorizontalExpand="True" VerticalExpand="True"/>
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
         <Button Name="EraseMode" Text="Erase"/>
-        <ScrollContainer>
-            <BoxContainer Name="ElementPlaceButtons" Orientation="Vertical"/>
-        </ScrollContainer>
+        <BoxContainer Name="ElementPlaceButtons" HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal"/>
+    </BoxContainer>
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+        <Button Name="Pause" Text="Pause" ToggleMode="True"/>
     </BoxContainer>
 </BoxContainer>

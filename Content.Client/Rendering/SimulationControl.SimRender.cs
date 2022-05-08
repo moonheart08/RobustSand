@@ -22,19 +22,20 @@ public sealed partial class SimulationControl
             for (var y = 0; y < SimulationConfig.SimHeight; y++)
             {
                 var pos = new Vector2i(x, y);
-                var entry = Simulation.GetPlayfieldEntry(pos);
+                var entry = _simSys.Simulation.GetPlayfieldEntry(pos);
                 if (entry.Type == ParticleType.NONE)
                     continue;
-                ref var part = ref Simulation.Particles[entry.Id];
+                ref var part = ref _simSys.Simulation.Particles[entry.Id];
                 DrawParticle(pos, ref part, ref newFrame);
             }
         }
+        
         _renderBuffer.SetSubImage(Vector2i.Zero, newFrame);
     }
 
     private void DrawParticle(Vector2i position, ref Particle particle, ref Image<Rgba32> newFrame)
     {
-        Simulation.Implementations[(int) particle.Type].Render(ref particle, out var color);
+        _simSys.Simulation.Implementations[(int) particle.Type].Render(ref particle, out var color);
         newFrame[position.X, position.Y] = new Rgba32(color.R, color.G, color.B, color.A);
     }
 }

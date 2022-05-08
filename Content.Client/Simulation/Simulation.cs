@@ -11,13 +11,13 @@ namespace Content.Client.Simulation;
 public sealed partial class Simulation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    
+
     public Particle[] Particles = new Particle[SimulationConfig.MaximumParticleId];
     private List<uint> _freeIds = Enumerable.Range(1,(int)SimulationConfig.MaximumParticleId-1).Reverse().Select(x => (uint)x).ToList();
     private PlayfieldEntry[] _playfield = new PlayfieldEntry[SimulationConfig.SimArea];
     
-    private Box2i _simBounds = Box2i.FromDimensions(Vector2i.Zero, new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1));
-    private Box2i _innerSimBounds = Box2i.FromDimensions(new Vector2i(4, 4), new Vector2i((int)SimulationConfig.SimWidth - 5, (int)SimulationConfig.SimHeight - 5));
+    public Box2i SimulationBounds = Box2i.FromDimensions(Vector2i.Zero, new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1));
+    public Box2i InnerSimulationBounds = Box2i.FromDimensions(new Vector2i(4, 4), new Vector2i((int)SimulationConfig.SimWidth - 5, (int)SimulationConfig.SimHeight - 5));
 
     private uint _lastActiveParticle = 0;
 
@@ -48,8 +48,8 @@ public sealed partial class Simulation
 
     public void RunFrame()
     {
-        UpdateParticles();
         CleanupNewFrame();
+        UpdateParticles();
     }
 
     private void CleanupNewFrame()
@@ -62,11 +62,14 @@ public sealed partial class Simulation
         uint newLastActive = 0;
         for (uint i = 0; i <= _lastActiveParticle; i++)
         {
-            if (Particles[i].Type == ParticleType.NONE) continue;
+            if (Particles[i].Type == ParticleType.NONE) 
+                continue;
             
             ref var part = ref Particles[i];
             var position = part.Position.RoundedI();
-            SetPlayfieldEntry(position, new PlayfieldEntry(part.Type, i));
+            var entry = new PlayfieldEntry(part.Type, i);
+            SetPlayfieldEntry(position, entry);
+            DebugTools.Assert(GetPlayfieldEntry(position) == entry);
             if (i > newLastActive)
                 newLastActive = i;
         }
@@ -86,16 +89,21 @@ public sealed partial class Simulation
             ref var part = ref Particles[i];
             var partPos = part.Position.RoundedI();
 
-            if (!_innerSimBounds.Contains(partPos))
+            if (!InnerSimulationBounds.Contains(partPos))
             {
                 DeleteParticle(i, partPos, ref part);
                 continue; // Particle's deleted, moving on.
             }
             
             Implementations[(int)part.Type].Update(ref part, i, partPos, this);
+            
+            if (part.Type == ParticleType.NONE)
+                continue;
 
             ProcessParticleMovement(i, ref part);
         }
+        
+
     }
 
     public PlayfieldEntry GetPlayfieldEntry(Vector2i position)
@@ -143,7 +151,7 @@ public sealed partial class Simulation
         _freeIds.Add(id);
         part.Type = ParticleType.NONE;
 
-        if (_simBounds.Contains(position))
+        if (SimulationBounds.Contains(position))
             SetPlayfieldEntry(position, PlayfieldEntry.None);
     }
 }

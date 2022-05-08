@@ -1,7 +1,9 @@
 using System.Globalization;
 using Content.Client.GameView;
+using Content.Client.Simulation;
 using Content.Client.UI;
 using Robust.Client;
+using Robust.Client.Graphics;
 using Robust.Client.State;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
@@ -29,6 +31,11 @@ public sealed class EntryPoint : GameClient
 
         IoCManager.Resolve<ILocalizationManager>()
             .LoadCulture(new CultureInfo(_cfgManager.GetCVar(GameConfigVars.GameLocale)));
+        
+        _cfgManager.SetCVar("display.width", 512);
+        _cfgManager.SetCVar("display.height", 512 + 64);
+        _cfgManager.SetCVar("display.gpu_preference", 1);
+        _cfgManager.SetCVar("display.uiScale", 1.0f);
     }
 
     public override void Init()
@@ -72,7 +79,5 @@ public sealed class EntryPoint : GameClient
     public override void Update(ModUpdateLevel level, FrameEventArgs frameEventArgs)
     {
         base.Update(level, frameEventArgs);
-            
-        // DEVNOTE: Game update loop goes here. Usually you'll want some independent GameTicker.
     }
 }

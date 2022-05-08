@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Maths;
+﻿using System;
+using Robust.Shared.Maths;
 
 namespace Content.Client.Simulation.ParticleKinds.Abstract;
 
@@ -43,7 +44,7 @@ public abstract class ParticleImplementation
     /// </summary>
     /// <param name="other">The particle to check against.</param>
     /// <returns>Whether or not this particle can move through the other.</returns>
-    public MovementType CanMoveThrough(ParticleImplementation other)
+    public virtual MovementType CanMoveThrough(ParticleImplementation other)
     {
         return other.Weight < Weight ? MovementType.Swap : MovementType.Block;
     }
@@ -67,8 +68,14 @@ public abstract class ParticleImplementation
     {
         
     }
+
+    public virtual void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
+    {
+        
+    }
 }
 
+[Flags]
 public enum ParticleMovementProperty
 {
     None = 0,

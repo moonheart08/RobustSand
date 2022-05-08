@@ -1,7 +1,7 @@
 ﻿using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
 
-namespace Content.Client.Simulation.ParticleKinds.Dusts;
+namespace Content.Client.Simulation.ParticleKinds.Powders;
 
 [Particle]
 public sealed class Sand : ParticleImplementation
