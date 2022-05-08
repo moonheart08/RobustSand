@@ -1,5 +1,7 @@
 ﻿using System;
+using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
+using Robust.Shared.Random;
 
 namespace Content.Client.Simulation;
 
@@ -7,18 +9,60 @@ public sealed partial class Simulation
 {
     private void ProcessParticleMovement(uint id, ref Particle part)
     {
-        part.Velocity += new Vector2(0, Implementations[(int) part.Type].RateOfGravity);
+        var impl = Implementations[(int) part.Type];
+        part.Velocity += new Vector2(0, impl.RateOfGravity);
         var oldPos = part.Position;
         var newPos = part.Position + part.Velocity;
         if (oldPos.RoundedI() == newPos.RoundedI())
         {
             part.Position = newPos;
+            if (impl.MovementProperties.HasFlag(ParticleMovementProperty.Liquid))
+            {
+                var whichFirst = _random.Prob(0.5f);
+                for (var i = 0; i < 2; i++)
+                {
+                    if (whichFirst)
+                    {
+                        TryMoveParticle(id, newPos + Vector2.UnitX, ref part);
+                    }
+                    else
+                    {
+                        TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
+                    }
+                }
+            }
             return;
         }
 
         var success = TryMoveParticle(id, newPos, ref part);
+
         if (!success)
-            part.Velocity = Vector2.Zero;
+        {
+            if (impl.MovementProperties.HasFlag(ParticleMovementProperty.Spread) || 
+                impl.MovementProperties.HasFlag(ParticleMovementProperty.Liquid))
+            {
+                var whichFirst = _random.Prob(0.5f);
+                for (var i = 0; i < 2 || success; i++)
+                {
+                    if (whichFirst)
+                    {
+                        success = TryMoveParticle(id, newPos + Vector2.UnitX, ref part);
+                    }
+                    else
+                    {
+                        success = TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
+                    }
+                    
+                    if (!success)
+                        part.Velocity = Vector2.Zero;
+                }
+            }
+
+            if (impl.MovementProperties == ParticleMovementProperty.None)
+            {
+                part.Velocity = Vector2.Zero;
+            }
+        }
     }
 
     private bool TryMoveParticle(uint id, Vector2 newPosition, ref Particle part)

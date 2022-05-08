@@ -17,9 +17,15 @@ public sealed partial class Simulation
     private ParticleImplementation[] InitializeImplementations()
     {
         var impls = _reflectionManager.FindTypesWithAttribute(typeof(ParticleAttribute)).ToList();
-        return impls.Select(x => (ParticleImplementation) _sandboxHelper.CreateInstance(x)).OrderBy(x => (int)x.Type).ToArray();
+        return impls.Select(x =>
+        {
+            var impl = (ParticleImplementation) _sandboxHelper.CreateInstance(x);
+            IoCManager.InjectDependencies(impl);
+            return impl;
+        }).OrderBy(x => (int)x.Type).ToArray();
     }
 
+    
     public MovementType GetMovementType(ParticleType x, ParticleType y)
     {
         return _movementTable[(int) y * (int) ParticleType.END + (int) x];

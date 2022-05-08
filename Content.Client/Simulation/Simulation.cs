@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
+using Robust.Shared.Random;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Simulation;
 
 public sealed partial class Simulation
 {
+    [Dependency] private readonly IRobustRandom _random = default!;
+    
     public Particle[] Particles = new Particle[SimulationConfig.MaximumParticleId];
     private List<uint> _freeIds = Enumerable.Range(1,(int)SimulationConfig.MaximumParticleId-1).Reverse().Select(x => (uint)x).ToList();
     private PlayfieldEntry[] _playfield = new PlayfieldEntry[SimulationConfig.SimArea];
@@ -24,15 +27,29 @@ public sealed partial class Simulation
         Implementations = InitializeImplementations();
         _movementTable = InitializeMovementTable();
         Particles.Initialize();
+
+        for (var y = SimulationConfig.SimHeight - 16; y < (SimulationConfig.SimHeight - 5); y++)
+        {
+            for (var x = 5; x < SimulationConfig.SimWidth-5; x++)
+            {
+                TrySpawnParticle(new Vector2i(x, (int)y), ParticleType.WALL, out _);
+            }
+        }
+
+        TrySpawnParticle(new Vector2i(255, 255), ParticleType.SPAWNER, out var spawnerId); // The world shall have sand.
+        Particles[spawnerId!.Value].Variable1 = (int) ParticleType.SAND;
+        
+        TrySpawnParticle(new Vector2i(205, 255), ParticleType.SPAWNER, out var spawnerId2); // The world shall have sand.
+        Particles[spawnerId2!.Value].Variable1 = (int) ParticleType.SAND;
+        
+        TrySpawnParticle(new Vector2i(230, 255), ParticleType.SPAWNER, out var spawnerId3); // The world shall have sand.
+        Particles[spawnerId3!.Value].Variable1 = (int) ParticleType.WATER;
     }
 
     public void RunFrame()
     {
-        CleanupNewFrame();
         UpdateParticles();
-
-        if (GetPlayfieldEntry(new Vector2i(255, 255)).Type == ParticleType.NONE)
-            TrySpawnParticle(new Vector2i(255, 255), ParticleType.SAND, out _); // The world shall have sand.
+        CleanupNewFrame();
     }
 
     private void CleanupNewFrame()

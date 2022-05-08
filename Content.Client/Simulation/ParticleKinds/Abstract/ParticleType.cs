@@ -4,5 +4,8 @@ public enum ParticleType: ushort
 {
     NONE = 0,
     SAND,
+    WALL,
+    SPAWNER,
+    WATER,
     END,
 }

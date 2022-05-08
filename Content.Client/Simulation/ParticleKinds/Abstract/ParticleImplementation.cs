@@ -48,22 +48,22 @@ public abstract class ParticleImplementation
         return other.Weight < Weight ? MovementType.Swap : MovementType.Block;
     }
     
-    public void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
+    public virtual void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
     {
         // Do nothing.
     }
 
-    public void Render(ref Particle particle, out Color color)
+    public virtual void Render(ref Particle particle, out Color color)
     {
         color = Color; // do the minimum amount of work.
     }
 
-    public bool Spawn(ref Particle particle)
+    public virtual bool Spawn(ref Particle particle)
     {
         return true;
     }
 
-    public void Delete(ref Particle particle)
+    public virtual void Delete(ref Particle particle)
     {
         
     }
@@ -73,4 +73,5 @@ public enum ParticleMovementProperty
 {
     None = 0,
     Spread = 1,
+    Liquid = 2,
 }
