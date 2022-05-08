@@ -16,23 +16,4 @@ public sealed class SimulationSystem : EntitySystem
         if (!SimPaused)
             Simulation.RunFrame();
     }
-
-    public void Draw(Vector2i pos)
-    {
-        var entry = Simulation.GetPlayfieldEntry(pos);
-        if (Placing == ParticleType.NONE)
-        {
-            if (entry.Type == ParticleType.NONE)
-                return;
-            Simulation.DeleteParticle(entry.Id, pos, ref Simulation.Particles[entry.Id]);
-        }
-
-        if (entry.Type != ParticleType.NONE)
-        {
-            Simulation.Implementations[(int)entry.Type].DrawnOn(ref Simulation.Particles[entry.Id], entry.Id, pos, Simulation, Placing);
-            return;
-        }
-
-        Simulation.TrySpawnParticle(pos, Placing, out _);
-    }
 }

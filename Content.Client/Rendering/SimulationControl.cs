@@ -59,8 +59,10 @@ public sealed partial class SimulationControl : Control
             var pos = args.RelativePosition.RoundedI();
             if (!_simSys.Simulation.SimulationBounds.Contains(pos / 2))
                 return;
+            
+            
 
-            _simSys.Draw(pos / 2);
+            _simSys.Simulation.Draw(pos / 2, pos / 2 + args.Relative.RoundedI() / 2, _simSys.Placing);
         }
     }
 
