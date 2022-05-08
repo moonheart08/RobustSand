@@ -1,4 +1,4 @@
-### Robust Toolbox Singleplayer-only Template Project!
-This is a singleplayer-only template project for RobustToolbox, to help bootstrap the whole thing. Good luck.
+### RobustSand
+I don’t like sand. It’s coarse and rough and irritating… and it gets everywhere.
 
-Also check out our [other template](https://github.com/space-wizards/RobustToolboxTemplate).
+But unfortunately that's the only thing in this little demo so if you don't like sand you ought to get going.
