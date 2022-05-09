@@ -16,7 +16,7 @@ public sealed class Coal : ParticleImplementation
         "The worst ore, unless you're playing 1.18 in which case you never have enough.";
 
     protected override byte PWeight => 128;
-    protected override Color PColor => Color.DarkSlateGray;
+    protected override Color PColor => Color.DarkGray;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
