@@ -48,6 +48,10 @@ public abstract class ParticleImplementation
 
     public float RateOfGravity;
 
+    protected virtual float PDiffusionRate => PRateOfGravity;
+
+    public float DiffusionRate;
+
     protected virtual float PBounceCoefficient { get; } = 0.1f;
 
     public float BounceCoefficient;
@@ -77,6 +81,7 @@ public abstract class ParticleImplementation
         MaximumVelocity = PMaximumVelocity;
         MovementFlags = PMovementFlags;
         PropertyFlags = PPropertyFlags;
+        DiffusionRate = PDiffusionRate;
     }
 
     /// <summary>
@@ -139,6 +144,7 @@ public enum ParticleMovementFlag
     None = 0,
     Spread = 1,
     Liquid = 2,
+    Gas = 4,
 }
 
 [Flags]

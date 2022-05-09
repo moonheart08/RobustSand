@@ -26,7 +26,10 @@ public sealed class Water : ParticleImplementation
         return other.MovementFlags.HasFlag(ParticleMovementFlag.Liquid) ? MovementType.Swap : base.CanMoveThrough(other);
     }
 
-    public override void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
+    public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
+        Simulation sim)
     {
+        // Smother it.
+        sim.DeleteParticle(fireId, firePosition, ref fire);
     }
 }

@@ -56,6 +56,9 @@ public sealed class Coal : ParticleImplementation
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
 
+                if (entry.Type == ParticleType.WATER)
+                    particle.Variable2 = 0; // Put out the flames.
+                
                 if (entry.Type != ParticleType.NONE)
                     continue;
 

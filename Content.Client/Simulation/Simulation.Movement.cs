@@ -11,7 +11,7 @@ public sealed partial class Simulation
     {
         var impl = Implementations[(int) part.Type];
 
-        if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
+        if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0 && (impl.MovementFlags & ParticleMovementFlag.Gas) == 0)
         {
             var curPosI = part.Position.RoundedI();
 
@@ -25,7 +25,7 @@ public sealed partial class Simulation
                 {
                     liquidShiftSuccess = TryMoveParticle(id, curPosI + (whichFirst ? Vector2.UnitX : -Vector2.UnitX),
                         ref part);
-                    part.Velocity += new Vector2(whichFirst ? impl.RateOfGravity : -impl.RateOfGravity, 0);
+                    part.Velocity += new Vector2(whichFirst ? impl.DiffusionRate : -impl.DiffusionRate, 0);
 
                     whichFirst = !whichFirst;
                 }
@@ -34,6 +34,16 @@ public sealed partial class Simulation
             {
                 part.Velocity += new Vector2(0, impl.RateOfGravity);
             }
+        }
+        else if ((impl.MovementFlags & ParticleMovementFlag.Gas) != 0)
+        {
+            var xVec = _random.Next(0, 3) - 1;
+            var yVec = _random.Next(0, 3) - 1;
+            var vec = new Vector2i(xVec, yVec);
+            
+            // We don't care if this succeeds or not.
+            TryMoveParticle(id, part.Position + vec, ref part);
+            part.Velocity += vec * impl.DiffusionRate;
         }
         else
         {

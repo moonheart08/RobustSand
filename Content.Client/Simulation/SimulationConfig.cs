@@ -46,4 +46,6 @@ public static class SimulationConfig
     /// Determines how easily particles can ignore the rules of physics and tunnel through walls.
     /// </summary>
     public const uint MaximumCollisionSteps = 4;
+
+    public const uint ConcurrencyThresh = 16384;
 }

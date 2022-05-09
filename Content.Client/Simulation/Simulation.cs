@@ -61,6 +61,13 @@ public sealed partial class Simulation
         var taskList = new List<Task>();
         //UpdateParticles(SimulationBounds);
 
+        if (LiveParticles < SimulationConfig.ConcurrencyThresh)
+        {
+            // just update the whole playfield and be done with it.
+            UpdateParticles(SimulationBounds);
+            return;
+        }
+        
         Task[] tasks = new Task[4 * (SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
 
         var idx = 0;

@@ -12,7 +12,9 @@ public sealed class Fire : ParticleImplementation
     protected override byte PWeight => 15;
     protected override Color PColor => Color.Firebrick;
     protected override float PRateOfGravity => -base.PRateOfGravity / 3;
+    protected override float PDiffusionRate => 0.05f;
     protected override float PMaximumVelocity => 1.4f;
+    // TODO: if/when airsim is coded make this a gas.
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
