@@ -40,7 +40,7 @@ public sealed partial class SimulationControl
     {
         var impl = _simSys.Simulation.Implementations[(int) particle.Type];
         impl.Render(ref particle, out var color);
-        if ((impl.ParticleRenderFlags & ParticleRenderFlag.Liquid) != 0)
+        if ((impl.ParticleRenderFlags & ParticleRenderFlag.Blob) != 0)
             liquidFrame[position.X, position.Y] = new Rgba32(color.R, color.G, color.B, color.A);
         else
             newFrame[position.X, position.Y] = new Rgba32(color.R, color.G, color.B, color.A);
