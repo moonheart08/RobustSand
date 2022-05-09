@@ -36,6 +36,8 @@
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                 <Button Name="Pause" Text="Pause" ToggleMode="True"/>
                 <Button Name="Clear" Text="Clear"/>
+                <Button Name="Save" Text="Save"/>
+                <Button Name="Load" Text="Load"/>
             </BoxContainer>
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
                 <Label Text="0ms" Name="SimTickTime"/>

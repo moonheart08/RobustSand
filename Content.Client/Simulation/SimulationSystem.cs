@@ -18,7 +18,7 @@ public sealed class SimulationSystem : EntitySystem
     public bool SimPaused = false;
     public ParticleType Placing = ParticleType.SAND;
     
-    public readonly Simulation Simulation = new Simulation();
+    public Simulation Simulation = new Simulation();
     private Stopwatch SimStopWatch = new Stopwatch();
     public TimeSpan SimTickTime = TimeSpan.Zero;
 

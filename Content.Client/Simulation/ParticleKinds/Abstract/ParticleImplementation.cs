@@ -164,5 +164,5 @@ public enum ParticlePropertyFlag : ushort
 public enum ParticleRenderFlag : byte
 {
     None = 0,
-    Liquid = 1,
+    Blob = 1,
 }
