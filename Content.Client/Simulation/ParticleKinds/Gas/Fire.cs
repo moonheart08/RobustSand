@@ -41,9 +41,9 @@ public sealed class Fire : ParticleImplementation
 
         particle.Variable1--;
         
-        for (int relX = -1; relX <= 1; relX++)
+        for (var relX = -1; relX <= 1; relX++)
         {
-            for (int relY = -1; relY <= 1; relY++)
+            for (var relY = -1; relY <= 1; relY++)
             {
                 var offsPos = position + new Vector2i(relX, relY);
                 
@@ -57,6 +57,9 @@ public sealed class Fire : ParticleImplementation
 
                 sim.Implementations[(int) entry.Type].Burn(ref sim.Particles[entry.Id], ref particle, entry.Id, id,
                     offsPos, position, sim);
+                
+                if (particle.Type != ParticleType.FIRE)
+                    return; // We can't burn things if we're not fire. May also have been deleted.
             }
         }
     }
