@@ -13,7 +13,7 @@ using Robust.Shared.Maths;
 namespace Content.Client.GameView;
 
 [GenerateTypedNameReferences]
-public sealed partial class GameEditorView : LayoutContainer
+public sealed partial class GameEditorView : BoxContainer
 {
     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
     private SimulationSystem _simSys = default!;
@@ -24,8 +24,8 @@ public sealed partial class GameEditorView : LayoutContainer
         IoCManager.InjectDependencies(this);
         _simSys = _entitySystemManager.GetEntitySystem<SimulationSystem>();
         
-        LayoutContainer.SetAnchorAndMarginPreset(BaseBox, LayoutPreset.Wide);
-        LayoutContainer.SetAnchorAndMarginPreset(InfoBox, LayoutPreset.TopWide);
+        //LayoutContainer.SetAnchorAndMarginPreset(this, LayoutPreset.Wide);
+        IoCManager.Resolve<IConfigurationManager>().SetCVar("display.uiScale", 0.0f);
 
         SimControl.MinSize = new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight);
         Pause.OnToggled += args =>
@@ -37,10 +37,10 @@ public sealed partial class GameEditorView : LayoutContainer
         {
             _simSys.Placing = ParticleType.NONE;
         };
-        
-        Zoom.OnToggled += args =>
+
+        Clear.OnPressed += args =>
         {
-            IoCManager.Resolve<IConfigurationManager>().SetCVar("display.uiScale", args.Pressed ? 2.0f : 1.0f);
+            _simSys.Simulation.Clear();
         };
 
         foreach (var impl in _simSys.Simulation.Implementations)
@@ -64,8 +64,9 @@ public sealed partial class GameEditorView : LayoutContainer
 
     protected override void Draw(DrawingHandleScreen handle)
     {
+        this.MinSize = IoCManager.Resolve<IClyde>().MainWindow.Size;
         SimTickTime.Text = $"{_simSys.SimTickTime.TotalMilliseconds:F3} ms, {_simSys.Simulation.LiveParticles} particles, {SimControl.MousePosition}";
-        
+        FUCK.MinHeight = MinSize.Y;
         base.Draw(handle);
     }
 }

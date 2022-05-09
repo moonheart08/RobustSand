@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Content.Client.Input;
 using Robust.Client.UserInterface;
 using Content.Client.Simulation;
 using Robust.Client.Graphics;
@@ -61,7 +62,7 @@ public sealed partial class SimulationControl : Control
         if (!_simSys.Simulation.SimulationBounds.Contains(pos))
             return;
         MousePosition = pos;
-        
+
         if (currentlyDrawing)
         {
             _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), _simSys.Placing);
@@ -82,6 +83,7 @@ public sealed partial class SimulationControl : Control
         var rect = UIBox2
             .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
         handle.DrawTextureRect(_renderBuffer, rect);
+        handle.DrawCircle(MousePosition, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
         MinSize = rect.Size;
     }
 

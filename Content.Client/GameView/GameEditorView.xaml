@@ -1,6 +1,10 @@
-﻿<LayoutContainer xmlns="https://spacestation14.io"
+﻿<BoxContainer xmlns="https://spacestation14.io"
               xmlns:ui="clr-namespace:Content.Client.UI"
-              xmlns:rendering="clr-namespace:Content.Client.Rendering">
+              xmlns:rendering="clr-namespace:Content.Client.Rendering"
+              VerticalExpand="True"
+              HorizontalExpand="True"
+              Orientation="Horizontal"
+              Align="Center">
     <!--
     <MenuBar Name="EditorMenuBar"/>
     <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
@@ -19,18 +23,24 @@
             
         </LayoutContainer>
     </BoxContainer>-->
-    <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="BaseBox">
-        <rendering:SimulationControl Name="SimControl" HorizontalExpand="True" VerticalExpand="True"/>
-        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-            <Button Name="EraseMode" Text="Erase"/>
-            <BoxContainer Name="ElementPlaceButtons" HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal"/>
-        </BoxContainer>
-        <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
-            <Button Name="Pause" Text="Pause" ToggleMode="True"/>
-            <Button Name="Zoom" Text="Zoom x2" ToggleMode="True"/>
+    <PanelContainer Margin="8">
+    <BoxContainer Orientation="Vertical" Name="FUCK" VerticalExpand="True" Align="Center">
+        <BoxContainer Orientation="Vertical" Name="BaseBox" Align="Center">
+            <BoxContainer Orientation="Horizontal" Align="Center" HorizontalExpand="True">
+                <rendering:SimulationControl Name="SimControl" Margin="8"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Button Name="EraseMode" Text="Erase"/>
+                <BoxContainer Name="ElementPlaceButtons" HorizontalExpand="True" VerticalExpand="True" Orientation="Horizontal"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <Button Name="Pause" Text="Pause" ToggleMode="True"/>
+                <Button Name="Clear" Text="Clear"/>
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
+                <Label Text="0ms" Name="SimTickTime"/>
+            </BoxContainer>
         </BoxContainer>
     </BoxContainer>
-    <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
-        <Label Text="0ms" Name="SimTickTime"/>
-    </BoxContainer>
-</LayoutContainer>
+    </PanelContainer>
+</BoxContainer>

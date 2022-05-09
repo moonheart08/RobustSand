@@ -1,9 +1,11 @@
 using System.Globalization;
 using Content.Client.GameView;
+using Content.Client.Input;
 using Content.Client.Simulation;
 using Content.Client.UI;
 using Robust.Client;
 using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.State;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
@@ -67,6 +69,9 @@ public sealed class EntryPoint : GameClient
         _client.PlayerNameOverride = "three";
         _stateManager.RequestStateChange<GameEditorState>();
         IoCManager.Resolve<StylesheetManager>().Initialize();
+        var inputMan = IoCManager.Resolve<IInputManager>();
+        ContentContexts.SetupContexts(inputMan.Contexts);
+
     }
 
     protected override void Dispose(bool disposing)

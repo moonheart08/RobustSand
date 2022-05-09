@@ -186,4 +186,9 @@ binds: # These are all the current engine keybinds.
   type: State
   key: Tab
   mod1: Shift
-  
+- function: BrushSizeUp
+  type: State
+  key: LBracket
+- function: BrushSizeDown
+  type: State
+  key: RBracket

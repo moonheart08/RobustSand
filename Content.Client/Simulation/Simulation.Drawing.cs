@@ -6,6 +6,8 @@ namespace Content.Client.Simulation;
 
 public sealed partial class Simulation
 {
+    public uint DrawingRadius = 2;
+    
     public void Draw(Vector2i start, Vector2i end, ParticleType placing)
     {
         DrawLine(start, end, placing);
@@ -22,7 +24,7 @@ public sealed partial class Simulation
 
         while (true)
         {
-            DrawPixel(acc, placing);
+            DrawBrush(acc, placing);
             if (acc.X == end.X && acc.Y == end.Y) break;
             var e2 = 2 * error;
             if (e2 >= dy)
@@ -36,6 +38,23 @@ public sealed partial class Simulation
                 if (acc.Y == end.Y) break;
                 error += dx;
                 acc.Y += sy;
+            }
+        }
+    }
+
+    public void DrawBrush(Vector2i pos, ParticleType placing)
+    {
+        var drawAdj = new Vector2i((int)DrawingRadius, (int)DrawingRadius);
+        DrawRect(new Box2i(pos - drawAdj, pos + drawAdj), placing);
+    }
+
+    public void DrawRect(Box2i rect, ParticleType placing)
+    {
+        for (var x = rect.BottomLeft.X; x < rect.TopRight.X; x++)
+        {
+            for (var y = rect.BottomLeft.Y; y < rect.TopRight.Y; y++)
+            {
+                DrawPixel(new Vector2i(x, y), placing);
             }
         }
     }
@@ -60,5 +79,15 @@ public sealed partial class Simulation
         }
 
         TrySpawnParticle(pos, placing, out _);
+    }
+
+    public void Clear()
+    {
+        for (uint i = 0; i < _lastActiveParticle; i++)
+        {
+            ref var part = ref Particles[i];
+            if (part.Type != ParticleType.NONE)
+                DeleteParticle(i, part.Position.RoundedI(), ref part);
+        }
     }
 }

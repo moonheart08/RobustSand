@@ -28,8 +28,7 @@ public sealed partial class Simulation
         IoCManager.InjectDependencies(this);
         Implementations = InitializeImplementations();
         _movementTable = InitializeMovementTable();
-        Particles.Initialize();
-        
+
         DebugTools.Assert(SimulationBounds.Contains(Vector2i.Zero));
         DebugTools.Assert(SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1)));
         DebugTools.Assert(!SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight)));

@@ -48,7 +48,7 @@ public sealed class Spawner : ParticleImplementation
 
     public override void DrawnOn(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType drawnType)
     {
-        if (drawnType is not ParticleType.NONE or ParticleType.SPAWNER)
+        if (drawnType is not ParticleType.NONE and not ParticleType.SPAWNER)
             particle.Variable1 = (int) drawnType;
     }
 }

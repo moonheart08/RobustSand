@@ -1,4 +1,5 @@
 ﻿using Robust.Client.Graphics;
+using Robust.Client.Input;
 using Robust.Client.State;
 using Robust.Client.UserInterface;
 using Robust.Shared.Timing;
@@ -14,6 +15,7 @@ public sealed class GameEditorState : State
     {
         _userInterface = IoCManager.Resolve<IUserInterfaceManager>();
         _userInterface.StateRoot.AddChild(_view);
+        IoCManager.Resolve<IInputManager>().Contexts.SetActiveContext("editor");
     }
 
     public override void Shutdown()

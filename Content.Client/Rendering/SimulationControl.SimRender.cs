@@ -31,6 +31,8 @@ public sealed partial class SimulationControl
         }
         
         _renderBuffer.SetSubImage(Vector2i.Zero, newFrame);
+        
+        
     }
 
     private void DrawParticle(Vector2i position, ref Particle particle, ref Image<Rgba32> newFrame)
