@@ -15,7 +15,7 @@ public sealed class Water : ParticleImplementation
     protected override string PName => "Water";
     protected override string PDescription => "It's wet. Probably.";
     protected override byte PWeight => 32;
-    protected override Color PColor => Color.MediumAquamarine;
+    protected override Color PColor => Color.DeepSkyBlue;
     protected override float PRateOfGravity => base.PRateOfGravity * 2;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;

@@ -12,5 +12,6 @@ public enum ParticleType: ushort
     FIRE,
     SMOKE,
     WOOD,
+    COAL,
     END,
 }
