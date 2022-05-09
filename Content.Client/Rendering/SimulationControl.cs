@@ -45,16 +45,11 @@ public sealed partial class SimulationControl : Control
         _renderBuffer = _clyde.CreateBlankTexture<Rgba32>(
             new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
             TextureLoadParameters.Default);
-        _liquidBuffer = _clyde.CreateBlankTexture<Rgba32>(
-            new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
-            new TextureLoadParameters()
-            {
-                SampleParameters = new TextureSampleParameters()
-                {
-                    WrapMode = TextureWrapMode.Repeat,
-                }
-            });
+        _liquidBuffer = _clyde.CreateBlankTexture<Rgba32>(_renderBuffer.Size, "simbuffer");
         _bufferClear = new Image<Rgba32>(_renderBuffer.Width, _renderBuffer.Height, new Rgba32(0, 0, 0, 0));
+        _newFrame = _bufferClear.Clone();
+        _liquidFrame = _bufferClear.Clone();
+        _bufferFrameBox = UIBox2i.FromDimensions(Vector2i.Zero, _renderBuffer.Size);
         MouseFilter = MouseFilterMode.Stop;
     }
 

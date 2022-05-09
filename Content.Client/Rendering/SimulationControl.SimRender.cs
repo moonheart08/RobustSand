@@ -1,5 +1,6 @@
 ﻿using Content.Client.Simulation;
 using Content.Client.Simulation.ParticleKinds.Abstract;
+using Robust.Client.Utility;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 using SixLabors.ImageSharp;
@@ -12,11 +13,17 @@ namespace Content.Client.Rendering;
 public sealed partial class SimulationControl
 {
     private Image<Rgba32> _bufferClear;
+
+    private Image<Rgba32> _newFrame;
+
+    private Image<Rgba32> _liquidFrame;
+
+    private UIBox2i _bufferFrameBox;
     
     private void DrawNewFrame()
     {
-        var newFrame = _bufferClear.Clone();
-        var liquidFrame = _bufferClear.Clone();
+        _bufferClear.Blit(_bufferFrameBox, _newFrame, Vector2i.Zero);
+        _bufferClear.Blit(_bufferFrameBox, _liquidFrame, Vector2i.Zero);
 
         for (var x = 0; x < SimulationConfig.SimWidth; x++)
         {
@@ -27,13 +34,13 @@ public sealed partial class SimulationControl
                 if (entry.Type == ParticleType.NONE)
                     continue;
                 ref var part = ref _simSys.Simulation.Particles[entry.Id];
-                DrawParticle(pos, ref part, ref newFrame, ref liquidFrame);
+                DrawParticle(pos, ref part, ref _newFrame, ref _liquidFrame);
             }
         }
         
-        _renderBuffer.SetSubImage(Vector2i.Zero, newFrame);
+        _renderBuffer.SetSubImage(Vector2i.Zero, _newFrame);
         
-        _liquidBuffer.SetSubImage(Vector2i.Zero, liquidFrame);
+        _liquidBuffer.SetSubImage(Vector2i.Zero, _liquidFrame);
     }
 
     private void DrawParticle(Vector2i position, ref Particle particle, ref Image<Rgba32> newFrame, ref Image<Rgba32> liquidFrame)

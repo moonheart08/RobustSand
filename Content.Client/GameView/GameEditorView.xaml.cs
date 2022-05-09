@@ -52,6 +52,7 @@ public sealed partial class GameEditorView : BoxContainer
             if (stream is null)
                 return; // oops
             stream.Write(saveFile.WriteFile());
+            stream.Close();
         };
 
         Load.OnPressed += async args =>
@@ -63,8 +64,14 @@ public sealed partial class GameEditorView : BoxContainer
             var buffer = new byte[bufLen];
             stream.Read(buffer);
             _simSys.Simulation = new Simulation.Simulation(new SaveData(buffer));
+            stream.Close();
         };
 
+        Discord.OnPressed += args =>
+        {
+            IoCManager.Resolve<IUriOpener>().OpenUri("https://discord.gg/Mr962SaRD3");
+        };
+        
         foreach (var impl in _simSys.Simulation.Implementations)
         {
             if (impl.Type == ParticleType.NONE)

@@ -38,6 +38,7 @@
                 <Button Name="Clear" Text="Clear"/>
                 <Button Name="Save" Text="Save"/>
                 <Button Name="Load" Text="Load"/>
+                <Button Name="Discord" Text="Discord" HorizontalAlignment="Right" HorizontalExpand="True"/>
             </BoxContainer>
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
                 <Label Text="0ms" Name="SimTickTime"/>
