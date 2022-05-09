@@ -13,6 +13,7 @@ public struct Particle
     public ParticleType Type = ParticleType.NONE;
     public int Variable1;
     public int Variable2;
+    public bool AlreadyUpdated;
 
     /// <summary>
     /// Constructs a particle
@@ -25,5 +26,6 @@ public struct Particle
         Velocity = Vector2.Zero;
         Variable1 = 0;
         Variable2 = 0;
+        AlreadyUpdated = false;
     }
 }

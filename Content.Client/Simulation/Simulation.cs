@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
 using Robust.Shared.Random;
@@ -56,15 +57,46 @@ public sealed partial class Simulation
     public void RunFrame()
     {
         CleanupNewFrame();
-        UpdateParticles();
+        var taskList = new List<Task>();
+        //UpdateParticles(SimulationBounds);
+
+        Task[] tasks = new Task[4 * (SimulationConfig.SimWidth / 128) * (SimulationConfig.SimHeight / 128)];
+
+        var idx = 0;
+        for (int step = 0; step < 4; step++)
+        {
+            for (int x = 0; x < SimulationConfig.SimWidth / 128; x++)
+            {
+                for (int y = 0; y < SimulationConfig.SimHeight / 128; y++)
+                {
+                    var chunk = GetChunk(step, x, y);
+                    tasks[idx] = Task.Run(() => UpdateParticles(chunk));
+                    idx++;
+                }
+            }
+        }
+
+        Task.WaitAll(tasks);
+    }
+
+    public Box2i GetChunk(int step, int x, int y)
+    {
+        const uint totalX = SimulationConfig.SimWidth / 64;
+        const uint totalY = SimulationConfig.SimHeight / 64;
+        bool offsetX = step % 2 != 0;
+        bool offsetY = step >= 2;
+
+        Vector2i pos = new Vector2i((x * 2 * 64) + (offsetX ? 64 : 0), (y * 2 * 64) + (offsetY ? 64 : 0));
+
+        return Box2i.FromDimensions(pos, Vector2i.One * 63);
     }
 
     private void CleanupNewFrame()
     {
-        for (var i = 0; i < SimulationConfig.SimArea; i++)
+        /*for (var i = 0; i < SimulationConfig.SimArea; i++)
         {
             _playfield[i] = PlayfieldEntry.None;
-        }
+        }*/
 
         uint newLastActive = 0;
         uint liveCount = 0;
@@ -74,6 +106,7 @@ public sealed partial class Simulation
                 continue;
             
             ref var part = ref Particles[i];
+            part.AlreadyUpdated = false;
             var position = part.Position.RoundedI();
             var entry = new PlayfieldEntry(part.Type, i);
             SetPlayfieldEntry(position, entry);
@@ -89,16 +122,17 @@ public sealed partial class Simulation
         _lastActiveParticle = newLastActive;
     }
 
-    private void UpdateParticles()
+    private void UpdateParticles(Box2i region)
     {
         // This comment is left here in memory of 12 lines of variable declarations.
 
         for (uint i = 0; i <= _lastActiveParticle; i++)
         {
-            if (Particles[i].Type == ParticleType.NONE)
+            if (Particles[i].Type == ParticleType.NONE || !region.Contains(Particles[i].Position.RoundedI()) || Particles[i].AlreadyUpdated)
                 continue;
 
             ref var part = ref Particles[i];
+            part.AlreadyUpdated = true;
             var partPos = part.Position.RoundedI();
 
             if (!InnerSimulationBounds.Contains(partPos))

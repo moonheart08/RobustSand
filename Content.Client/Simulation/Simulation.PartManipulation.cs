@@ -1,4 +1,5 @@
-﻿using Content.Client.Simulation.ParticleKinds.Abstract;
+﻿using System.Runtime.CompilerServices;
+using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
 using Robust.Shared.Utility;
 
@@ -6,16 +7,19 @@ namespace Content.Client.Simulation;
 
 public sealed partial class Simulation
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public PlayfieldEntry GetPlayfieldEntry(Vector2i position)
     {
         return _playfield[position.Y * SimulationConfig.SimWidth + position.X];
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void SetPlayfieldEntry(Vector2i position, PlayfieldEntry id)
     {
         _playfield[position.Y * SimulationConfig.SimWidth + position.X] = id;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public bool TrySpawnParticle(Vector2i position, ParticleType type, out uint? id)
     {
         if (_freeIds.Count == 0)
@@ -32,7 +36,8 @@ public sealed partial class Simulation
             id = newId;
             _freeIds.Pop();
             Particles[newId] = part;
-            SetPlayfieldEntry(position, new PlayfieldEntry(type, id.Value));
+            SetPlayfieldEntry(part.Position.RoundedI(), new PlayfieldEntry(type, id.Value));
+            DebugTools.Assert(GetPlayfieldEntry(part.Position.RoundedI()) == new PlayfieldEntry(type, id.Value));
 
             if (_lastActiveParticle < id)
                 _lastActiveParticle = id.Value;
