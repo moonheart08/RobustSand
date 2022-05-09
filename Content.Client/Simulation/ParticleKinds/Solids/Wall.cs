@@ -6,12 +6,12 @@ namespace Content.Client.Simulation.ParticleKinds.Solids;
 [Particle]
 public sealed class Wall : ParticleImplementation
 {
-    public override ParticleType Type => ParticleType.WALL;
-    public override string Name => "Wall";
-    public override string Description => "An immovable wall.";
-    public override byte Weight => 255;
-    public override Color Color => Color.Gray;
-    public override float RateOfGravity => 0;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.None;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
+    protected override ParticleType PType => ParticleType.WALL;
+    protected override string PName => "Wall";
+    protected override string PDescription => "An immovable wall.";
+    protected override byte PWeight => 255;
+    protected override Color PColor => Color.Gray;
+    protected override float PRateOfGravity => 0;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
 }

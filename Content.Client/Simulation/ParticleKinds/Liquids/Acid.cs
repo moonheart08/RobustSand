@@ -8,14 +8,14 @@ namespace Content.Client.Simulation.ParticleKinds.Liquids;
 public sealed class Acid : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    
-    public override ParticleType Type => ParticleType.ACID;
-    public override string Name => "Acid";
-    public override string Description => "An incredibly acidic acid.";
-    public override byte Weight => 31;
-    public override Color Color => Color.Magenta;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant;
+
+    protected override ParticleType PType => ParticleType.ACID;
+    protected override string PName => "Acid";
+    protected override string PDescription => "An incredibly acidic acid.";
+    protected override byte PWeight => 31;
+    protected override Color PColor => Color.Magenta;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant;
 
     public override bool Spawn(ref Particle particle)
     {

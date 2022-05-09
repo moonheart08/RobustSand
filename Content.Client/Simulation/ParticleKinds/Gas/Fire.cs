@@ -6,16 +6,15 @@ namespace Content.Client.Simulation.ParticleKinds.Gas;
 [Particle]
 public sealed class Fire : ParticleImplementation
 {
-
-    public override ParticleType Type => ParticleType.FIRE;
-    public override string Name => "Fire";
-    public override string Description => "It burns, it burns!";
-    public override byte Weight => 15;
-    public override Color Color => Color.Firebrick;
-    public override float RateOfGravity => -base.RateOfGravity / 3;
-    public override float MaximumVelocity => 1.4f;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleType PType => ParticleType.FIRE;
+    protected override string PName => "Fire";
+    protected override string PDescription => "It burns, it burns!";
+    protected override byte PWeight => 15;
+    protected override Color PColor => Color.Firebrick;
+    protected override float PRateOfGravity => -base.PRateOfGravity / 3;
+    protected override float PMaximumVelocity => 1.4f;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
     public const int FireLifespan = 30 * 5;
 

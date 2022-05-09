@@ -8,41 +8,76 @@ public abstract class ParticleImplementation
     /// <summary>
     /// The type of the particle. No duplicates, new particles need a new type, one implementation per type.
     /// </summary>
-    public abstract ParticleType Type { get; }
+    protected abstract ParticleType PType { get; }
+
+    public ParticleType Type;
     
     /// <summary>
     /// The name of the particle.
     /// </summary>
-    public abstract string Name { get; }
+    protected abstract string PName { get; }
+
+    public string Name;
     
     /// <summary>
     /// The description of the particle.
     /// </summary>
-    public abstract string Description { get; }
+    protected abstract string PDescription { get; }
+    
+    public string Description;
 
     /// <summary>
     /// Controls whether a particle sinks or not through another particle.
     /// Higher values sink through lower values by default.
     /// </summary>
-    public abstract byte Weight { get; }
+    protected abstract byte PWeight { get; }
+
+    public byte Weight;
 
     /// <summary>
     /// The color of the particle.
     /// </summary>
-    public abstract Color Color { get; }
+    protected abstract Color PColor { get; }
+
+    public Color Color;
 
     /// <summary>
     /// The rate of gravitational pull (to the floor) for the particle.
     /// </summary>
-    public virtual float RateOfGravity { get; } = 0.05f;
+    protected virtual float PRateOfGravity { get; } = 0.05f;
 
-    public virtual float BounceCoefficient { get; } = 0.1f;
+    public float RateOfGravity;
 
-    public virtual float MaximumVelocity { get; } = 4.0f;
+    protected virtual float PBounceCoefficient { get; } = 0.1f;
 
-    public abstract ParticleMovementFlag MovementFlags { get; }
-    
-    public abstract ParticlePropertyFlag PropertyFlags { get; }
+    public float BounceCoefficient;
+
+    protected virtual float PMaximumVelocity { get; } = 4.0f;
+
+    public float MaximumVelocity;
+
+    protected abstract ParticleMovementFlag PMovementFlags { get; }
+
+    public ParticleMovementFlag MovementFlags;
+
+    protected abstract ParticlePropertyFlag PPropertyFlags { get; }
+
+    public ParticlePropertyFlag PropertyFlags;
+
+
+    protected ParticleImplementation()
+    {
+        Type = PType;
+        Name = PName;
+        Description = PDescription;
+        Weight = PWeight;
+        Color = PColor;
+        RateOfGravity = PRateOfGravity;
+        BounceCoefficient = PBounceCoefficient;
+        MaximumVelocity = PMaximumVelocity;
+        MovementFlags = PMovementFlags;
+        PropertyFlags = PPropertyFlags;
+    }
 
     /// <summary>
     /// Whether or not this particle can move through the given other particle.

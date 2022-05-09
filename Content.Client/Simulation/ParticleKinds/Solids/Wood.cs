@@ -8,14 +8,14 @@ namespace Content.Client.Simulation.ParticleKinds.Solids;
 public sealed class Wood : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    public override ParticleType Type => ParticleType.WOOD;
-    public override string Name => "Wood";
-    public override string Description => "Actually wooden, unlike the air.";
-    public override byte Weight => 255;
-    public override Color Color => Color.BurlyWood;
-    public override float RateOfGravity => 0;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.None;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
+    protected override ParticleType PType => ParticleType.WOOD;
+    protected override string PName => "Wood";
+    protected override string PDescription => "Actually wooden, unlike the air.";
+    protected override byte PWeight => 255;
+    protected override Color PColor => Color.BurlyWood;
+    protected override float PRateOfGravity => 0;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
 
     public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)

@@ -10,17 +10,16 @@ namespace Content.Client.Simulation.ParticleKinds.Liquids;
 public sealed class Water : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
-    
-    public override ParticleType Type => ParticleType.WATER;
-    public override string Name => "Water";
-    public override string Description => "It's wet. Probably.";
-    public override byte Weight => 32;
-    public override Color Color => Color.MediumAquamarine;
-    public override float RateOfGravity => base.RateOfGravity * 2;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
 
-    public override float BounceCoefficient => 0.3f;
+    protected override ParticleType PType => ParticleType.WATER;
+    protected override string PName => "Water";
+    protected override string PDescription => "It's wet. Probably.";
+    protected override byte PWeight => 32;
+    protected override Color PColor => Color.MediumAquamarine;
+    protected override float PRateOfGravity => base.PRateOfGravity * 2;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override float PBounceCoefficient => 0.3f;
 
     public override MovementType CanMoveThrough(ParticleImplementation other)
     {

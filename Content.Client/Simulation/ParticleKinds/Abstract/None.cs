@@ -5,11 +5,11 @@ namespace Content.Client.Simulation.ParticleKinds.Abstract;
 [Particle]
 public sealed class None : ParticleImplementation
 {
-    public override ParticleType Type => ParticleType.NONE;
-    public override string Name => "None";
-    public override string Description => "Doesn't exist.";
-    public override byte Weight => 0;
-    public override Color Color => Color.SandyBrown;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.None;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleType PType => ParticleType.NONE;
+    protected override string PName => "None";
+    protected override string PDescription => "Doesn't exist.";
+    protected override byte PWeight => 0;
+    protected override Color PColor => Color.SandyBrown;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 }

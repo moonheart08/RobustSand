@@ -6,15 +6,15 @@ namespace Content.Client.Simulation.ParticleKinds.Gas;
 [Particle]
 public sealed class Smoke : ParticleImplementation
 {
-    public override ParticleType Type => ParticleType.SMOKE;
-    public override string Name => "Smoke";
-    public override string Description => "This looks like a job for Woodsy Owl.";
-    public override byte Weight => 14;
-    public override Color Color => Color.WhiteSmoke;
-    public override float RateOfGravity => -base.RateOfGravity / 2;
-    public override float MaximumVelocity => 2f;
-    public override ParticleMovementFlag MovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    public override ParticlePropertyFlag PropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleType PType => ParticleType.SMOKE;
+    protected override string PName => "Smoke";
+    protected override string PDescription => "This looks like a job for Woodsy Owl.";
+    protected override byte PWeight => 14;
+    protected override Color PColor => Color.WhiteSmoke;
+    protected override float PRateOfGravity => -base.PRateOfGravity / 2;
+    protected override float PMaximumVelocity => 2f;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
     public const int SmokeLifespan = 30 * 15;
 
