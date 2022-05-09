@@ -21,6 +21,7 @@ public sealed class Gas : ParticleImplementation
     protected override float PRateOfGravity => 0.0f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Gas;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Liquid;
 
     public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)

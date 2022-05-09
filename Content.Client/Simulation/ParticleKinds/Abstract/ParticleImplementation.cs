@@ -68,6 +68,9 @@ public abstract class ParticleImplementation
 
     public ParticlePropertyFlag PropertyFlags;
 
+    protected virtual ParticleRenderFlag PParticleRenderFlags { get; } = ParticleRenderFlag.None;
+
+    public ParticleRenderFlag ParticleRenderFlags;
 
     protected ParticleImplementation()
     {
@@ -82,6 +85,7 @@ public abstract class ParticleImplementation
         MovementFlags = PMovementFlags;
         PropertyFlags = PPropertyFlags;
         DiffusionRate = PDiffusionRate;
+        ParticleRenderFlags = PParticleRenderFlags;
     }
 
     /// <summary>
@@ -139,7 +143,7 @@ public abstract class ParticleImplementation
 }
 
 [Flags]
-public enum ParticleMovementFlag
+public enum ParticleMovementFlag : ushort
 {
     None = 0,
     Spread = 1,
@@ -148,9 +152,17 @@ public enum ParticleMovementFlag
 }
 
 [Flags]
-public enum ParticlePropertyFlag
+public enum ParticlePropertyFlag : ushort
 {
     None = 0,
     AcidResistant = 1,
     Solid = 2,
+    NoTick = 4,
+}
+
+[Flags]
+public enum ParticleRenderFlag : byte
+{
+    None = 0,
+    Liquid = 1,
 }

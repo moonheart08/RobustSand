@@ -19,6 +19,7 @@ public sealed class Water : ParticleImplementation
     protected override float PRateOfGravity => base.PRateOfGravity * 2;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Liquid;
     protected override float PBounceCoefficient => 0.3f;
 
     public override MovementType CanMoveThrough(ParticleImplementation other)

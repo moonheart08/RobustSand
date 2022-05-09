@@ -16,6 +16,7 @@ public sealed class Smoke : ParticleImplementation
     // TODO: if/when airsim is coded make this a gas.
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Liquid;
 
     public const int SmokeLifespan = 30 * 15;
 

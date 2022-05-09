@@ -7,6 +7,7 @@ using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -17,6 +18,7 @@ namespace Content.Client.Rendering;
 public sealed partial class SimulationControl : Control
 {
     [Dependency] private readonly IClyde _clyde = default!;
+    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
 
     public float UpdateRate = 1.0f / 30;
@@ -33,6 +35,8 @@ public sealed partial class SimulationControl : Control
 
     private OwnedTexture _renderBuffer;
 
+    private OwnedTexture _liquidBuffer;
+
     public SimulationControl()
     {
         IoCManager.InjectDependencies(this);
@@ -41,7 +45,16 @@ public sealed partial class SimulationControl : Control
         _renderBuffer = _clyde.CreateBlankTexture<Rgba32>(
             new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
             TextureLoadParameters.Default);
-        _bufferClear = new Image<Rgba32>(_renderBuffer.Width, _renderBuffer.Height, new Rgba32(0, 0, 0));
+        _liquidBuffer = _clyde.CreateBlankTexture<Rgba32>(
+            new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
+            new TextureLoadParameters()
+            {
+                SampleParameters = new TextureSampleParameters()
+                {
+                    WrapMode = TextureWrapMode.Repeat,
+                }
+            });
+        _bufferClear = new Image<Rgba32>(_renderBuffer.Width, _renderBuffer.Height, new Rgba32(0, 0, 0, 0));
         MouseFilter = MouseFilterMode.Stop;
     }
 
@@ -96,7 +109,19 @@ public sealed partial class SimulationControl : Control
         base.Draw(handle);
         var rect = UIBox2
             .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
+        
         handle.DrawTextureRect(_renderBuffer, rect);
+        for (var relX = -1; relX < 2; relX++)
+        {
+            for (var relY = -1; relY < 2; relY++)
+            {
+                var amt = 1 / 9.0f;
+                if (relX != 0 && relY != 0)
+                    amt = 1 / 18.0f;
+                
+                handle.DrawTextureRect(_liquidBuffer, rect.Translated(new Vector2(relX, relY)), new Color(1.0f, 1.0f, 1.0f, amt));
+            }
+        }
         handle.DrawCircle(MousePosition, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
         MinSize = rect.Size;
     }

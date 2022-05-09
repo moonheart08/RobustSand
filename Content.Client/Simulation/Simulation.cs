@@ -139,10 +139,14 @@ public sealed partial class Simulation
 
         for (uint i = 0; i <= _lastActiveParticle; i++)
         {
-            if (Particles[i].Type == ParticleType.NONE || !region.Contains(Particles[i].Position.RoundedI()) || Particles[i].AlreadyUpdated)
-                continue;
-
             ref var part = ref Particles[i];
+            var impl = Implementations[(int) part.Type];
+            if ((impl.PropertyFlags & ParticlePropertyFlag.NoTick) != 0)
+                continue; // nothing to see here.
+            
+            if (part.Type == ParticleType.NONE || !region.Contains(part.Position.RoundedI()) || part.AlreadyUpdated)
+                continue;
+            
             part.AlreadyUpdated = true;
             var partPos = part.Position.RoundedI();
 
@@ -152,7 +156,7 @@ public sealed partial class Simulation
                 continue; // Particle's deleted, moving on.
             }
             
-            Implementations[(int)part.Type].Update(ref part, i, partPos, this);
+            impl.Update(ref part, i, partPos, this);
             
             if (part.Type == ParticleType.NONE)
                 continue;
