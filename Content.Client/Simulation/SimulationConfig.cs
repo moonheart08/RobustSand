@@ -13,6 +13,11 @@ public static class SimulationConfig
     /// </summary>
     public const uint SimHeight = 512;
 
+    public const uint ChunkSize = 128;
+
+    public const uint SimWidthChunks = SimWidth / ChunkSize;
+    public const uint SimHeightChunks = SimHeight / ChunkSize;
+
     /// <summary>
     /// The calculated area of the simulation playfield.
     /// </summary>

@@ -189,6 +189,8 @@ binds: # These are all the current engine keybinds.
 - function: BrushSizeUp
   type: State
   key: LBracket
+  canRepeat: true
 - function: BrushSizeDown
   type: State
   key: RBracket
+  canRepeat: true

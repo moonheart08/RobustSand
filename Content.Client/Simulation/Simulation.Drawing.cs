@@ -83,7 +83,7 @@ public sealed partial class Simulation
 
     public void Clear()
     {
-        for (uint i = 0; i < _lastActiveParticle; i++)
+        for (uint i = 0; i < Particles.Length; i++)
         {
             ref var part = ref Particles[i];
             if (part.Type != ParticleType.NONE)

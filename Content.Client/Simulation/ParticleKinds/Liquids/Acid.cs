@@ -26,7 +26,7 @@ public sealed class Acid : ParticleImplementation
 
     public override void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
     {
-        if (particle.Variable1 == 0)
+        if (particle.Variable1 <= 0)
         {
             sim.DeleteParticle(id, position, ref particle);
             return;

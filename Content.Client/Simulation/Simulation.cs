@@ -60,14 +60,14 @@ public sealed partial class Simulation
         var taskList = new List<Task>();
         //UpdateParticles(SimulationBounds);
 
-        Task[] tasks = new Task[4 * (SimulationConfig.SimWidth / 128) * (SimulationConfig.SimHeight / 128)];
+        Task[] tasks = new Task[4 * (SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
 
         var idx = 0;
         for (int step = 0; step < 4; step++)
         {
-            for (int x = 0; x < SimulationConfig.SimWidth / 128; x++)
+            for (int x = 0; x < (SimulationConfig.SimWidthChunks / 2); x++)
             {
-                for (int y = 0; y < SimulationConfig.SimHeight / 128; y++)
+                for (int y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
                 {
                     var chunk = GetChunk(step, x, y);
                     tasks[idx] = Task.Run(() => UpdateParticles(chunk));
@@ -81,14 +81,14 @@ public sealed partial class Simulation
 
     public Box2i GetChunk(int step, int x, int y)
     {
-        const uint totalX = SimulationConfig.SimWidth / 64;
-        const uint totalY = SimulationConfig.SimHeight / 64;
         bool offsetX = step % 2 != 0;
         bool offsetY = step >= 2;
 
-        Vector2i pos = new Vector2i((x * 2 * 64) + (offsetX ? 64 : 0), (y * 2 * 64) + (offsetY ? 64 : 0));
+        var chunkSize = (int)SimulationConfig.ChunkSize;
 
-        return Box2i.FromDimensions(pos, Vector2i.One * 63);
+        Vector2i pos = new Vector2i((x * 2 * chunkSize) + (offsetX ? chunkSize : 0), (y * 2 * chunkSize) + (offsetY ? chunkSize : 0));
+
+        return Box2i.FromDimensions(pos, Vector2i.One * chunkSize);
     }
 
     private void CleanupNewFrame()
