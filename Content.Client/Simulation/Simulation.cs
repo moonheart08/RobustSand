@@ -54,11 +54,12 @@ public sealed partial class Simulation
         TrySpawnParticle(new Vector2i(230, 255), ParticleType.SPAWNER, out var spawnerId3); // The world shall have sand.
         Particles[spawnerId3!.Value].Variable1 = (int) ParticleType.WATER;
     }
+    
+    private Task[] _tasks = new Task[(SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
 
     public void RunFrame()
     {
         CleanupNewFrame();
-        var taskList = new List<Task>();
         //UpdateParticles(SimulationBounds);
 
         if (LiveParticles < SimulationConfig.ConcurrencyThresh)
@@ -68,7 +69,7 @@ public sealed partial class Simulation
             return;
         }
         
-        Task[] tasks = new Task[4 * (SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
+        
 
         var idx = 0;
         for (int step = 0; step < 4; step++)
@@ -78,13 +79,15 @@ public sealed partial class Simulation
                 for (int y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
                 {
                     var chunk = GetChunk(step, x, y);
-                    tasks[idx] = Task.Run(() => UpdateParticles(chunk));
+                    _tasks[idx] = Task.Run(() => UpdateParticles(chunk));
                     idx++;
                 }
             }
+            Task.WaitAll(_tasks);
+            idx = 0;
         }
 
-        Task.WaitAll(tasks);
+        
     }
 
     public Box2i GetChunk(int step, int x, int y)
