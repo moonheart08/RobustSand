@@ -101,10 +101,10 @@ public sealed partial class Simulation
 
     private void CleanupNewFrame()
     {
-        /*for (var i = 0; i < SimulationConfig.SimArea; i++)
+        for (var i = 0; i < SimulationConfig.SimArea; i++)
         {
             _playfield[i] = PlayfieldEntry.None;
-        }*/
+        }
 
         uint newLastActive = 0;
         uint liveCount = 0;

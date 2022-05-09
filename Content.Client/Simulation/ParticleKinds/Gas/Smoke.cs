@@ -14,7 +14,7 @@ public sealed class Smoke : ParticleImplementation
     protected override float PRateOfGravity => -base.PRateOfGravity / 2;
     protected override float PMaximumVelocity => 2f;
     // TODO: if/when airsim is coded make this a gas.
-    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Gas | ParticleMovementFlag.Spread;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
     public const int SmokeLifespan = 30 * 15;
