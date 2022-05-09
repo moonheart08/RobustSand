@@ -111,17 +111,17 @@ public sealed partial class SimulationControl : Control
             .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
         
         handle.DrawTextureRect(_renderBuffer, rect);
-        for (var relX = -1; relX < 2; relX++)
+        for (var relX = -2; relX < 3; relX++)
         {
-            for (var relY = -1; relY < 2; relY++)
+            for (var relY = -2; relY < 3; relY++)
             {
-                var amt = 1 / 9.0f;
-                if (relX != 0 && relY != 0)
-                    amt = 1 / 18.0f;
-                
+                var amt = 1 / (9.0f * (new Vector2(relX, relY).Length + 1));
+
                 handle.DrawTextureRect(_liquidBuffer, rect.Translated(new Vector2(relX, relY)), new Color(1.0f, 1.0f, 1.0f, amt));
             }
         }
+        // Fire effects use point primitives.
+        //handle.DrawPrimitives(DrawPrimitiveTopology.PointList, );
         handle.DrawCircle(MousePosition, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
         MinSize = rect.Size;
     }
