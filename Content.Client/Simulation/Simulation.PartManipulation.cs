@@ -22,19 +22,18 @@ public sealed partial class Simulation
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
     public bool TrySpawnParticle(Vector2i position, ParticleType type, out uint? id)
     {
-        if (_freeIds.Count == 0)
+        // TODO: Is this even thread safe???? (Probably not!) (definitely not)
+        if (!_freeIds.TryPop(out var newId))
         {
             id = null;
             return false;
         }
-
-        var newId = _freeIds[^1];
+        
         DebugTools.Assert(Particles[newId].Type == ParticleType.NONE);
         var part = new Particle(position, type);
         if (Implementations[(int) type].Spawn(ref part))
         {
             id = newId;
-            _freeIds.Pop();
             Particles[newId] = part;
             SetPlayfieldEntry(part.Position.RoundedI(), new PlayfieldEntry(type, id.Value));
             DebugTools.Assert(GetPlayfieldEntry(part.Position.RoundedI()) == new PlayfieldEntry(type, id.Value));
@@ -44,6 +43,7 @@ public sealed partial class Simulation
             return true;
         }
 
+        _freeIds.Push(newId);
         id = null;
         return false;
     }
@@ -52,7 +52,7 @@ public sealed partial class Simulation
     {
         DebugTools.Assert(Particles[id].Type != ParticleType.NONE);
         Implementations[(int) particle.Type].Delete(ref particle);
-        _freeIds.Add(id);
+        _freeIds.Push(id);
         particle.Type = ParticleType.NONE;
 
         if (SimulationBounds.Contains(position))

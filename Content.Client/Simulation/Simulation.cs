@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ public sealed partial class Simulation
     [Dependency] private readonly IRobustRandom _random = default!;
 
     public Particle[] Particles = new Particle[SimulationConfig.MaximumParticleId];
-    private List<uint> _freeIds = Enumerable.Range(1,(int)SimulationConfig.MaximumParticleId-1).Reverse().Select(x => (uint)x).ToList();
+    private ConcurrentStack<uint> _freeIds = new (Enumerable.Range(1,(int)SimulationConfig.MaximumParticleId-1).Reverse().Select(x => (uint)x).ToList());
     private PlayfieldEntry[] _playfield = new PlayfieldEntry[SimulationConfig.SimArea];
     
     public Box2i SimulationBounds = Box2i.FromDimensions(Vector2i.Zero, new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1));
