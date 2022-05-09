@@ -51,6 +51,7 @@ public sealed partial class GameEditorView : BoxContainer
             var stream = await IoCManager.Resolve<IFileDialogManager>().OpenFile();
             if (stream is null)
                 return; // oops
+            stream.SetLength(0);
             stream.Write(saveFile.WriteFile());
             stream.Close();
         };
