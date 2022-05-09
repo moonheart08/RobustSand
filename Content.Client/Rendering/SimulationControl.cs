@@ -2,6 +2,7 @@
 using Content.Client.Input;
 using Robust.Client.UserInterface;
 using Content.Client.Simulation;
+using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Client.Graphics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
@@ -26,7 +27,9 @@ public sealed partial class SimulationControl : Control
 
     public Vector2i MousePosition;
 
-    private bool currentlyDrawing = false;
+    private bool _currentlyDrawing = false;
+
+    private bool _currentlyErasing = false;
 
     private OwnedTexture _renderBuffer;
 
@@ -51,7 +54,10 @@ public sealed partial class SimulationControl : Control
     {
         if (args.Function == EngineKeyFunctions.UIClick)
         {
-            currentlyDrawing = true;
+            _currentlyDrawing = true;
+        } else if (args.Function == EngineKeyFunctions.UIRightClick)
+        {
+            _currentlyErasing = true;
         }
     }
 
@@ -63,9 +69,14 @@ public sealed partial class SimulationControl : Control
             return;
         MousePosition = pos;
 
-        if (currentlyDrawing)
+        if (_currentlyDrawing)
         {
             _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), _simSys.Placing);
+        }
+
+        if (_currentlyErasing)
+        {
+            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.NONE);
         }
     }
 
@@ -73,7 +84,10 @@ public sealed partial class SimulationControl : Control
     {
         if (args.Function == EngineKeyFunctions.UIClick)
         {
-            currentlyDrawing = false;
+            _currentlyDrawing = false;
+        } else if (args.Function == EngineKeyFunctions.UIRightClick)
+        {
+            _currentlyErasing = false;
         }
     }
     
