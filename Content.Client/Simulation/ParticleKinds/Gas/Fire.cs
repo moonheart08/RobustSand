@@ -29,14 +29,13 @@ public sealed class Fire : ParticleImplementation
 
     private readonly Color[] _fireColors = {Color.FromHex("#000000"), Color.FromHex("#60300F"), Color.FromHex("#DFBF6F"), Color.FromHex("#AF9F0F") };
 
-    private readonly float[] _firePoints = { 0.0f, 0.5f, 0.9f, 1.0f };
+    private readonly float[] _firePoints = { 0.0f, 0.3f, 0.8f, 1.0f };
 
     private readonly Color[] _fireGradient;
 
     public Fire()
     {
         _fireGradient = RenderHelpers.GenerateGradient(_firePoints, _fireColors, FireLifespan+50);
-        Logger.Debug($"{string.Join(",", _fireGradient)}");
     }
 
     public override bool Spawn(ref Particle particle)
