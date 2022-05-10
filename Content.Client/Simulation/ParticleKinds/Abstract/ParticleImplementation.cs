@@ -68,7 +68,7 @@ public abstract class ParticleImplementation
 
     public ParticlePropertyFlag PropertyFlags;
 
-    protected virtual ParticleRenderFlag PParticleRenderFlags { get; } = ParticleRenderFlag.None;
+    protected virtual ParticleRenderFlag PParticleRenderFlags { get; } = ParticleRenderFlag.NoFlags;
 
     public ParticleRenderFlag ParticleRenderFlags;
 
@@ -163,6 +163,17 @@ public enum ParticlePropertyFlag : ushort
 [Flags]
 public enum ParticleRenderFlag : byte
 {
-    None = 0,
-    Blob = 1,
+    NoFlags = 0,
+    /// <summary>
+    /// Prevents the particle from being drawn to the base buffer.
+    /// </summary>
+    None = 1,
+    /// <summary>
+    /// Draws the particle to the blob buffer.
+    /// </summary>
+    Blob = 2,
+    /// <summary>
+    /// Draws the particle using the fire algorithm.
+    /// </summary>
+    Fire = 4,
 }

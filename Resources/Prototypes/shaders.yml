@@ -1,0 +1,4 @@
+﻿- type: shader
+  id: fire
+  kind: source
+  path: "/Shaders/fire.swsl"

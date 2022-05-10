@@ -1,0 +1,5 @@
+﻿void fragment() {
+    float suvx = 6 - UV.x * 12;
+    float suvy = 6 - UV.y * 12;
+    COLOR = vec4(1.0, 1.0, 1.0, (exp(-0.05*(suvx*suvx + suvy*suvy))/10.0));
+}

@@ -33,23 +33,12 @@ public sealed partial class SimulationControl : Control
 
     private bool _currentlyErasing = false;
 
-    private OwnedTexture _renderBuffer;
-
-    private OwnedTexture _liquidBuffer;
-
     public SimulationControl()
     {
         IoCManager.InjectDependencies(this);
         _simSys = _entitySystemManager.GetEntitySystem<SimulationSystem>();
         AlwaysRender = true;
-        _renderBuffer = _clyde.CreateBlankTexture<Rgba32>(
-            new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
-            TextureLoadParameters.Default);
-        _liquidBuffer = _clyde.CreateBlankTexture<Rgba32>(_renderBuffer.Size, "simbuffer");
-        _bufferClear = new Image<Rgba32>(_renderBuffer.Width, _renderBuffer.Height, new Rgba32(0, 0, 0, 0));
-        _newFrame = _bufferClear.Clone();
-        _liquidFrame = _bufferClear.Clone();
-        _bufferFrameBox = UIBox2i.FromDimensions(Vector2i.Zero, _renderBuffer.Size);
+        InitializeSimRender();
         MouseFilter = MouseFilterMode.Stop;
     }
 
@@ -97,28 +86,6 @@ public sealed partial class SimulationControl : Control
         {
             _currentlyErasing = false;
         }
-    }
-    
-    protected override void Draw(DrawingHandleScreen handle)
-    {
-        base.Draw(handle);
-        var rect = UIBox2
-            .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
-        
-        handle.DrawTextureRect(_renderBuffer, rect);
-        for (var relX = -2; relX < 3; relX++)
-        {
-            for (var relY = -2; relY < 3; relY++)
-            {
-                var amt = 1 / (9.0f * (new Vector2(relX, relY).Length + 1));
-
-                handle.DrawTextureRect(_liquidBuffer, rect.Translated(new Vector2(relX, relY)), new Color(1.0f, 1.0f, 1.0f, amt));
-            }
-        }
-        // Fire effects use point primitives.
-        //handle.DrawPrimitives(DrawPrimitiveTopology.PointList, );
-        handle.DrawCircle(MousePosition, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
-        MinSize = rect.Size;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
