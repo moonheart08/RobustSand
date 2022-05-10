@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Content.Client.Input;
 using Robust.Client.UserInterface;
 using Content.Client.Simulation;
@@ -110,7 +111,7 @@ public sealed partial class SimulationControl : Control
         {
             for (var relY = -2; relY < 3; relY++)
             {
-                var amt = 1 / (9.0f * (new Vector2(relX, relY).Length + 1));
+                var amt = (float)(Math.Exp(-0.3 * (relX * relX + relY * relY)) / 5.0);
 
                 handle.DrawTextureRect(_liquidBuffer, rect.Translated(new Vector2(relX, relY)), new Color(1.0f, 1.0f, 1.0f, amt));
             }
