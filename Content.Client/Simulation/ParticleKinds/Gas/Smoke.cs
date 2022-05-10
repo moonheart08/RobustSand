@@ -1,4 +1,5 @@
-﻿using Content.Client.Simulation.ParticleKinds.Abstract;
+﻿using System;
+using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
 
 namespace Content.Client.Simulation.ParticleKinds.Gas;
@@ -40,5 +41,11 @@ public sealed class Smoke : ParticleImplementation
         }
 
         particle.Variable1--;
+    }
+    
+    public override void Render(ref Particle particle, out Color color)
+    {
+        base.Render(ref particle, out var oldColor);
+        color = oldColor with {A = Math.Clamp(SmokeLifespan - particle.Variable1, 0, 64) / 64.0f };
     }
 }
