@@ -6,7 +6,7 @@ namespace Content.Client.Simulation.ParticleKinds.Widgets;
 [Particle]
 public sealed class Void : ParticleImplementation
 {
-    protected override ParticleType PType => ParticleType.VOID;
+    protected override ParticleType PType => ParticleType.Void;
     protected override string PName => "Void";
     protected override string PDescription => "A bottomless void to delete your infinite sand.";
     protected override byte PWeight => 255;
@@ -17,7 +17,7 @@ public sealed class Void : ParticleImplementation
 
     public override MovementType CanMoveThrough(ParticleImplementation other)
     {
-        return other.Type == ParticleType.VOID ? MovementType.Block : MovementType.Custom;
+        return other.Type == ParticleType.Void ? MovementType.Block : MovementType.Custom;
     }
 
     public override bool DoMovement(ref Particle self, ref Particle other, uint selfId, uint otherId, Vector2i selfPosition,

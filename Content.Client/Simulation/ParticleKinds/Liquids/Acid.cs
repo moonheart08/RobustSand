@@ -9,13 +9,14 @@ public sealed class Acid : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
 
-    protected override ParticleType PType => ParticleType.ACID;
+    protected override ParticleType PType => ParticleType.Acid;
     protected override string PName => "Acid";
     protected override string PDescription => "An incredibly acidic acid.";
     protected override byte PWeight => 31;
     protected override Color PColor => Color.Magenta;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Liquid;
+    protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
     public override bool Spawn(ref Particle particle)
     {
@@ -45,7 +46,7 @@ public sealed class Acid : ParticleImplementation
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
                 
-                if (entry.Type == ParticleType.NONE)
+                if (entry.Type == ParticleType.None)
                     continue;
                 
                 if ((sim.Implementations[(int)entry.Type].PropertyFlags & ParticlePropertyFlag.AcidResistant) != 0)

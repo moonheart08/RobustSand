@@ -16,7 +16,7 @@ public sealed class SimulationSystem : EntitySystem
     [Dependency] private readonly IInputManager _inputManager = default!;
     
     public bool SimPaused = false;
-    public ParticleType Placing = ParticleType.SAND;
+    public ParticleType Placing = ParticleType.Sand;
     
     public Simulation Simulation = new Simulation();
     private Stopwatch SimStopWatch = new Stopwatch();

@@ -6,7 +6,7 @@ namespace Content.Client.Simulation;
 
 public readonly record struct PlayfieldEntry
 {
-    public static PlayfieldEntry None => new PlayfieldEntry(ParticleType.NONE, 0);
+    public static PlayfieldEntry None => new PlayfieldEntry(ParticleType.None, 0);
     
     private readonly uint _inner;
 

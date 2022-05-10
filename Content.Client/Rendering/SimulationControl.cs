@@ -85,7 +85,7 @@ public sealed partial class SimulationControl : Control
 
         if (_currentlyErasing)
         {
-            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.NONE);
+            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.None);
         }
     }
 

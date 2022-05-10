@@ -11,7 +11,7 @@ public sealed class Fire : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     
-    protected override ParticleType PType => ParticleType.FIRE;
+    protected override ParticleType PType => ParticleType.Fire;
     protected override string PName => "Fire";
     protected override string PDescription => "It burns, it burns!";
     protected override byte PWeight => 15;
@@ -21,7 +21,7 @@ public sealed class Fire : ParticleImplementation
     protected override float PMaximumVelocity => 1.4f;
     // TODO: if/when airsim is coded make this a gas.
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
 
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
@@ -53,7 +53,7 @@ public sealed class Fire : ParticleImplementation
     {
         if (particle.Variable1 <= 0)
         {
-            sim.ChangeParticleType(id, position, ref particle, ParticleType.SMOKE);
+            sim.ChangeParticleType(id, position, ref particle, ParticleType.Smoke);
             return;
         }
 
@@ -70,13 +70,13 @@ public sealed class Fire : ParticleImplementation
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
                 
-                if (entry.Type == ParticleType.NONE)
+                if (entry.Type == ParticleType.None)
                     continue;
 
                 sim.Implementations[(int) entry.Type].Burn(ref sim.Particles[entry.Id], ref particle, entry.Id, id,
                     offsPos, position, sim);
                 
-                if (particle.Type != ParticleType.FIRE)
+                if (particle.Type != ParticleType.Fire)
                     return; // We can't burn things if we're not fire. May also have been deleted.
             }
         }

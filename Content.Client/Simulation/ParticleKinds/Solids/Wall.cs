@@ -6,7 +6,7 @@ namespace Content.Client.Simulation.ParticleKinds.Solids;
 [Particle]
 public sealed class Wall : ParticleImplementation
 {
-    protected override ParticleType PType => ParticleType.WALL;
+    protected override ParticleType PType => ParticleType.Wall;
     protected override string PName => "Wall";
     protected override string PDescription => "An immovable wall.";
     protected override byte PWeight => 255;

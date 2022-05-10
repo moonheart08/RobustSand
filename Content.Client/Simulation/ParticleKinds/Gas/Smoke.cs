@@ -7,7 +7,7 @@ namespace Content.Client.Simulation.ParticleKinds.Gas;
 [Particle]
 public sealed class Smoke : ParticleImplementation
 {
-    protected override ParticleType PType => ParticleType.SMOKE;
+    protected override ParticleType PType => ParticleType.Smoke;
     protected override string PName => "Smoke";
     protected override string PDescription => "This looks like a job for Woodsy Owl.";
     protected override byte PWeight => 14;
@@ -16,7 +16,7 @@ public sealed class Smoke : ParticleImplementation
     protected override float PMaximumVelocity => 2f;
     // TODO: if/when airsim is coded make this a gas.
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
     public const int SmokeLifespan = 30 * 15;

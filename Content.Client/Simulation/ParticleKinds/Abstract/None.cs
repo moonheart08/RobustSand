@@ -5,7 +5,7 @@ namespace Content.Client.Simulation.ParticleKinds.Abstract;
 [Particle]
 public sealed class None : ParticleImplementation
 {
-    protected override ParticleType PType => ParticleType.NONE;
+    protected override ParticleType PType => ParticleType.None;
     protected override string PName => "None";
     protected override string PDescription => "Doesn't exist.";
     protected override byte PWeight => 0;

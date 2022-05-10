@@ -29,7 +29,7 @@ public sealed partial class Simulation
             return false;
         }
         
-        DebugTools.Assert(Particles[newId].Type == ParticleType.NONE);
+        DebugTools.Assert(Particles[newId].Type == ParticleType.None);
         var part = new Particle(position, type);
         if (Implementations[(int) type].Spawn(ref part))
         {
@@ -50,10 +50,10 @@ public sealed partial class Simulation
 
     public void DeleteParticle(uint id, Vector2i position, ref Particle particle)
     {
-        DebugTools.Assert(Particles[id].Type != ParticleType.NONE);
+        DebugTools.Assert(Particles[id].Type != ParticleType.None);
         Implementations[(int) particle.Type].Delete(ref particle);
         _freeIds.Push(id);
-        particle.Type = ParticleType.NONE;
+        particle.Type = ParticleType.None;
 
         if (SimulationBounds.Contains(position))
             SetPlayfieldEntry(position, PlayfieldEntry.None);

@@ -9,7 +9,7 @@ public sealed class Coal : ParticleImplementation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
     
-    protected override ParticleType PType => ParticleType.COAL;
+    protected override ParticleType PType => ParticleType.Coal;
     protected override string PName => "Coal";
 
     protected override string PDescription =>
@@ -39,7 +39,7 @@ public sealed class Coal : ParticleImplementation
 
         if (particle.Variable1 <= 0)
         {
-            sim.ChangeParticleType(id, position, ref particle, ParticleType.FIRE);
+            sim.ChangeParticleType(id, position, ref particle, ParticleType.Fire);
             return;
         }
 
@@ -56,13 +56,13 @@ public sealed class Coal : ParticleImplementation
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
 
-                if (entry.Type == ParticleType.WATER)
+                if (entry.Type == ParticleType.Water)
                     particle.Variable2 = 0; // Put out the flames.
                 
-                if (entry.Type != ParticleType.NONE)
+                if (entry.Type != ParticleType.None)
                     continue;
 
-                sim.TrySpawnParticle(offsPos, ParticleType.FIRE, out _);
+                sim.TrySpawnParticle(offsPos, ParticleType.Fire, out _);
             }
         }
 

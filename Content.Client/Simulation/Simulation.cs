@@ -35,24 +35,23 @@ public sealed partial class Simulation
         DebugTools.Assert(SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1)));
         DebugTools.Assert(!SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight)));
         DebugTools.Assert(!SimulationBounds.Contains(-Vector2i.One));
-        
 
         for (var y = SimulationConfig.SimHeight - 16; y < (SimulationConfig.SimHeight - 5); y++)
         {
             for (var x = 5; x < SimulationConfig.SimWidth-5; x++)
             {
-                TrySpawnParticle(new Vector2i(x, (int)y), ParticleType.WALL, out _);
+                TrySpawnParticle(new Vector2i(x, (int)y), ParticleType.Wall, out _);
             }
         }
 
-        TrySpawnParticle(new Vector2i(255, 255), ParticleType.SPAWNER, out var spawnerId); // The world shall have sand.
-        Particles[spawnerId!.Value].Variable1 = (int) ParticleType.SAND;
+        TrySpawnParticle(new Vector2i(255, 255), ParticleType.Spawner, out var spawnerId); // The world shall have sand.
+        Particles[spawnerId!.Value].Variable1 = (int) ParticleType.Sand;
         
-        TrySpawnParticle(new Vector2i(205, 255), ParticleType.SPAWNER, out var spawnerId2); // The world shall have sand.
-        Particles[spawnerId2!.Value].Variable1 = (int) ParticleType.SAND;
+        TrySpawnParticle(new Vector2i(205, 255), ParticleType.Spawner, out var spawnerId2); // The world shall have sand.
+        Particles[spawnerId2!.Value].Variable1 = (int) ParticleType.Sand;
         
-        TrySpawnParticle(new Vector2i(230, 255), ParticleType.SPAWNER, out var spawnerId3); // The world shall have sand.
-        Particles[spawnerId3!.Value].Variable1 = (int) ParticleType.WATER;
+        TrySpawnParticle(new Vector2i(230, 255), ParticleType.Spawner, out var spawnerId3); // The world shall have sand.
+        Particles[spawnerId3!.Value].Variable1 = (int) ParticleType.Water;
     }
     
     private Task[] _tasks = new Task[(SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
@@ -113,7 +112,7 @@ public sealed partial class Simulation
         uint liveCount = 0;
         for (uint i = 0; i <= _lastActiveParticle; i++)
         {
-            if (Particles[i].Type == ParticleType.NONE) 
+            if (Particles[i].Type == ParticleType.None) 
                 continue;
             
             ref var part = ref Particles[i];
@@ -144,7 +143,7 @@ public sealed partial class Simulation
             if ((impl.PropertyFlags & ParticlePropertyFlag.NoTick) != 0)
                 continue; // nothing to see here.
             
-            if (part.Type == ParticleType.NONE || !region.Contains(part.Position.RoundedI()) || part.AlreadyUpdated)
+            if (part.Type == ParticleType.None || !region.Contains(part.Position.RoundedI()) || part.AlreadyUpdated)
                 continue;
             
             part.AlreadyUpdated = true;
@@ -158,7 +157,7 @@ public sealed partial class Simulation
             
             impl.Update(ref part, i, partPos, this);
             
-            if (part.Type == ParticleType.NONE)
+            if (part.Type == ParticleType.None)
                 continue;
 
             ProcessParticleMovement(i, ref part);

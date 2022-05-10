@@ -31,7 +31,7 @@ public sealed partial class SimulationControl
             {
                 var pos = new Vector2i(x, y);
                 var entry = _simSys.Simulation.GetPlayfieldEntry(pos);
-                if (entry.Type == ParticleType.NONE)
+                if (entry.Type == ParticleType.None)
                     continue;
                 ref var part = ref _simSys.Simulation.Particles[entry.Id];
                 DrawParticle(pos, ref part, ref _newFrame, ref _liquidFrame);

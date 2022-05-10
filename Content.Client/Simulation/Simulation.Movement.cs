@@ -16,12 +16,12 @@ public sealed partial class Simulation
             var curPosI = part.Position.RoundedI();
 
             var pos = curPosI + (impl.RateOfGravity >= 0 ?  new Vector2i(0, 1) : new Vector2i(0, -1));
-            if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.NONE)
+            if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.None)
             {
                 var whichFirst = _random.Prob(0.5f);
                 var liquidShiftSuccess = false;
 
-                for (var i = 0; i < 2 && !liquidShiftSuccess && part.Type != ParticleType.NONE; i++)
+                for (var i = 0; i < 2 && !liquidShiftSuccess && part.Type != ParticleType.None; i++)
                 {
                     liquidShiftSuccess = TryMoveParticle(id, curPosI + (whichFirst ? Vector2.UnitX : -Vector2.UnitX),
                         ref part);
@@ -52,7 +52,7 @@ public sealed partial class Simulation
         
         part.Velocity = part.Velocity.ClampMagnitude(impl.MaximumVelocity);
         
-        if (part.Type == ParticleType.NONE)
+        if (part.Type == ParticleType.None)
             return; // Got deleted during water movement.
         
         var oldPos = part.Position;
@@ -86,7 +86,7 @@ public sealed partial class Simulation
             newPos = acc;
         }
         
-        if (part.Type == ParticleType.NONE || !SimulationBounds.Contains(newPos.RoundedI()))
+        if (part.Type == ParticleType.None || !SimulationBounds.Contains(newPos.RoundedI()))
             return;
 
         var collidee = GetPlayfieldEntry(newPos.RoundedI());
@@ -99,7 +99,7 @@ public sealed partial class Simulation
             {
                 var whichFirst = _random.Prob(0.5f);
                 var success = false;
-                for (var i = 0; i < 2 && !success && part.Type != ParticleType.NONE; i++)
+                for (var i = 0; i < 2 && !success && part.Type != ParticleType.None; i++)
                 {
                     if (whichFirst)
                     {
@@ -160,6 +160,12 @@ public sealed partial class Simulation
                 // Figuring out if any particles are under us would be expensive, so we don't.
                 SetPlayfieldEntry(part.Position.RoundedI(), PlayfieldEntry.None);
                 SetPlayfieldEntry(newPosition.RoundedI(), new PlayfieldEntry(part.Type, id));
+                part.Position = newPosition;
+                return true;
+            case MovementType.PassUnder:
+                // Figuring out if any particles are under us would be expensive, so we don't.
+                SetPlayfieldEntry(part.Position.RoundedI(), PlayfieldEntry.None);
+                // Wherever we currently are, we pass underneath it.
                 part.Position = newPosition;
                 return true;
             case MovementType.Swap:

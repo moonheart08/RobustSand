@@ -28,16 +28,16 @@ public sealed partial class Simulation
     
     public MovementType GetMovementType(ParticleType x, ParticleType y)
     {
-        return _movementTable[(int) y * (int) ParticleType.END + (int) x];
+        return _movementTable[(int) y * (int) ParticleType.End + (int) x];
     }
     
     private MovementType[] InitializeMovementTable()
     {
-        var movementTable = new MovementType[(int) ParticleType.END * (int) ParticleType.END];
+        var movementTable = new MovementType[(int) ParticleType.End * (int) ParticleType.End];
 
-        for (var i = 0; i < (int) ParticleType.END; i++)
+        for (var i = 0; i < (int) ParticleType.End; i++)
         {
-            for (var j = 0; j < (int) ParticleType.END; j++)
+            for (var j = 0; j < (int) ParticleType.End; j++)
             {
                 MovementType result;
                 if (i == 0 || j == 0)
@@ -45,7 +45,7 @@ public sealed partial class Simulation
                 else
                     result = Implementations[i].CanMoveThrough(Implementations[j]);
 
-                movementTable[j * (int) ParticleType.END + i] = result;
+                movementTable[j * (int) ParticleType.End + i] = result;
             }
         }
 

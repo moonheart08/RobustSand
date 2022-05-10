@@ -65,14 +65,14 @@ public sealed partial class Simulation
             return;
         
         var entry = GetPlayfieldEntry(pos);
-        if (placing == ParticleType.NONE)
+        if (placing == ParticleType.None)
         {
-            if (entry.Type == ParticleType.NONE)
+            if (entry.Type == ParticleType.None)
                 return;
             DeleteParticle(entry.Id, pos, ref Particles[entry.Id]);
         }
 
-        if (entry.Type != ParticleType.NONE)
+        if (entry.Type != ParticleType.None)
         {
             Implementations[(int)entry.Type].DrawnOn(ref Particles[entry.Id], entry.Id, pos, this, placing);
             return;
@@ -86,7 +86,7 @@ public sealed partial class Simulation
         for (uint i = 0; i < Particles.Length; i++)
         {
             ref var part = ref Particles[i];
-            if (part.Type != ParticleType.NONE)
+            if (part.Type != ParticleType.None)
                 DeleteParticle(i, part.Position.RoundedI(), ref part);
         }
     }

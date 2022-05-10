@@ -5,5 +5,6 @@ public enum MovementType : byte
     Block = 0,
     Swap = 1,
     Pass = 2,
-    Custom = 3,
+    PassUnder = 3,
+    Custom = 4,
 }

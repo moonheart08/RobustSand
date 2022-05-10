@@ -158,6 +158,8 @@ public enum ParticlePropertyFlag : ushort
     AcidResistant = 1,
     Solid = 2,
     NoTick = 4,
+    Gas = 8,
+    Liquid = 16,
 }
 
 [Flags]

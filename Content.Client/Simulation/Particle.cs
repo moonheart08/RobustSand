@@ -15,7 +15,7 @@ public struct Particle
     public int Variable2;
     public int Variable3;
     public int Variable4;
-    public ParticleType Type = ParticleType.NONE;
+    public ParticleType Type = ParticleType.None;
     public bool AlreadyUpdated;
 
     /// <summary>

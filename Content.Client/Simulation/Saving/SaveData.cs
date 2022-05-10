@@ -16,13 +16,13 @@ public sealed class SaveData
     public SaveData(Simulation sim)
     {
         var parts = sim.Particles.ToList(); // Make a copy, the sim may still be running.
-        ParticleData = new byte[Particle.ParticleSaveSize * parts.Count(x => x.Type != ParticleType.NONE)];
+        ParticleData = new byte[Particle.ParticleSaveSize * parts.Count(x => x.Type != ParticleType.None)];
 
         var memSpan = ParticleData.Span;
         var idx = 0;
         foreach (var particle in parts)
         {
-            if (particle.Type == ParticleType.NONE)
+            if (particle.Type == ParticleType.None)
                 continue;
 
             Logger.Debug($"{idx}, {memSpan.Length}");
