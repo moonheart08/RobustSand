@@ -32,7 +32,7 @@ public sealed partial class GameEditorView : BoxContainer
         SimControl.MinSize = new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight);
         Pause.OnToggled += args =>
         {
-            _simSys.SimPaused = args.Pressed;
+            _simSys.Simulation.Paused = args.Pressed;
         };
 
         EraseMode.OnPressed += args =>

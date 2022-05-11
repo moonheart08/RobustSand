@@ -14,6 +14,9 @@ public sealed partial class Simulation
 {
     [Dependency] private readonly IRobustRandom _random = default!;
 
+    public bool Paused = false;
+    
+
     public Particle[] Particles = new Particle[SimulationConfig.MaximumParticleId];
     private ConcurrentStack<uint> _freeIds = new (Enumerable.Range(1,(int)SimulationConfig.MaximumParticleId-1).Reverse().Select(x => (uint)x).ToList());
     private PlayfieldEntry[] _playfield = new PlayfieldEntry[SimulationConfig.SimArea];
@@ -35,29 +38,16 @@ public sealed partial class Simulation
         DebugTools.Assert(SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1)));
         DebugTools.Assert(!SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight)));
         DebugTools.Assert(!SimulationBounds.Contains(-Vector2i.One));
-
-        for (var y = SimulationConfig.SimHeight - 16; y < (SimulationConfig.SimHeight - 5); y++)
-        {
-            for (var x = 5; x < SimulationConfig.SimWidth-5; x++)
-            {
-                TrySpawnParticle(new Vector2i(x, (int)y), ParticleType.Wall, out _);
-            }
-        }
-
-        TrySpawnParticle(new Vector2i(255, 255), ParticleType.Spawner, out var spawnerId); // The world shall have sand.
-        Particles[spawnerId!.Value].Variable1 = (int) ParticleType.Sand;
         
-        TrySpawnParticle(new Vector2i(205, 255), ParticleType.Spawner, out var spawnerId2); // The world shall have sand.
-        Particles[spawnerId2!.Value].Variable1 = (int) ParticleType.Sand;
-        
-        TrySpawnParticle(new Vector2i(230, 255), ParticleType.Spawner, out var spawnerId3); // The world shall have sand.
-        Particles[spawnerId3!.Value].Variable1 = (int) ParticleType.Water;
     }
     
     private Task[] _tasks = new Task[(SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
 
     public void RunFrame()
     {
+        if (Paused)
+            return;
+
         CleanupNewFrame();
         //UpdateParticles(SimulationBounds);
 
@@ -71,11 +61,11 @@ public sealed partial class Simulation
         
 
         var idx = 0;
-        for (int step = 0; step < 4; step++)
+        for (var step = 0; step < 4; step++)
         {
-            for (int x = 0; x < (SimulationConfig.SimWidthChunks / 2); x++)
+            for (var x = 0; x < (SimulationConfig.SimWidthChunks / 2); x++)
             {
-                for (int y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
+                for (var y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
                 {
                     var chunk = GetChunk(step, x, y);
                     _tasks[idx] = Task.Run(() => UpdateParticles(chunk));

@@ -15,19 +15,22 @@ public sealed class SimulationSystem : EntitySystem
 {
     [Dependency] private readonly IInputManager _inputManager = default!;
     
-    public bool SimPaused = false;
     public ParticleType Placing = ParticleType.Sand;
     
-    public Simulation Simulation = new Simulation();
+    public Simulation Simulation;
     private Stopwatch SimStopWatch = new Stopwatch();
     public TimeSpan SimTickTime = TimeSpan.Zero;
 
+    public SimulationSystem()
+    {
+        Simulation = new Simulation();
+    }
+    
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
         SimStopWatch.Restart();
-        if (!SimPaused)
-            Simulation.RunFrame();
+        Simulation.RunFrame();
 
         SimTickTime = SimStopWatch.Elapsed;
     }

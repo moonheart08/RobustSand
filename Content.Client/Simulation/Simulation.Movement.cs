@@ -44,6 +44,7 @@ public sealed partial class Simulation
             // We don't care if this succeeds or not.
             TryMoveParticle(id, part.Position + vec, ref part);
             part.Velocity += vec * impl.DiffusionRate;
+            part.Velocity += new Vector2(0, impl.RateOfGravity);
         }
         else
         {

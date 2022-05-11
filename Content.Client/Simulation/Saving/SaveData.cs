@@ -7,10 +7,12 @@ namespace Content.Client.Simulation.Saving;
 
 public sealed class SaveData
 {
-    public const int CurrentVersion = 1;
+    public const int CurrentVersion = 2;
     
     public int Version;
     public Memory<byte> ParticleData;
+
+    private Dictionary<ushort, ParticleType>? _particleTypeTable;
 
     // TODO: The save format should probably include an index of particle types.
     public SaveData(Simulation sim)
@@ -24,26 +26,36 @@ public sealed class SaveData
         {
             if (particle.Type == ParticleType.None)
                 continue;
-
-            Logger.Debug($"{idx}, {memSpan.Length}");
+            
             particle.ByteSerialize(memSpan.Slice(idx, Particle.ParticleSaveSize));
             idx += Particle.ParticleSaveSize;
         }
+        
+        Logger.InfoS("save",$"Serialized {idx} bytes of particle data, out of {ParticleData.Length} bytes allocated.");
 
         Version = CurrentVersion;
     }
 
     public byte[] WriteFile()
     {
-        // int version, int length.
-        Memory<byte> outp = new byte[ParticleData.Length + 8];
+        var nameTypeDict = Enum.GetValues<ParticleType>().ToDictionary(x => Enum.GetName(x)!, x => (ushort)x);
+        var dictLen = SerializationHelpers.ExpectedTypeDictLength(nameTypeDict);
+        Memory<byte> outp = new byte[ParticleData.Length + dictLen + 8];
         var outSpan = outp.Span;
+        var pos = 0;
+        BitConverter.TryWriteBytes(outSpan.Slice(pos, sizeof(int)), Version);
+        pos += 4;
+        BitConverter.TryWriteBytes(outSpan.Slice(pos, sizeof(int)), ParticleData.Length);
+        pos += 4;
+        SerializationHelpers.SerializeTypeDict(outSpan.Slice(pos, dictLen), nameTypeDict);
+        pos += dictLen;
+        ParticleData.Span.TryCopyTo(outSpan.Slice(pos));
 
-        BitConverter.TryWriteBytes(outSpan.Slice(0, 4), Version);
-        BitConverter.TryWriteBytes(outSpan.Slice(4, 4), ParticleData.Length);
-        ParticleData.Span.TryCopyTo(outSpan.Slice(8));
+        var arr = outp.ToArray();
         
-        return outp.ToArray();
+        Logger.InfoS("save", $"Wrote a {outp.Length} byte save file with hash {SerializationHelpers.CalcCRC32(arr):x8}.");
+        
+        return arr;
     }
 
     public SaveData(byte[] data)
@@ -53,14 +65,39 @@ public sealed class SaveData
         var version = BitConverter.ToInt32(dataSpan.Slice(0, 4));
         if (version is > CurrentVersion or > 100)
             throw new ArgumentException($"Unrecognized save version {version}");
+        Version = version;
+
+        var hash = SerializationHelpers.CalcCRC32(data);
+        Logger.InfoS("save", $"Reading a v{version} save file with hash {hash:x8}...");
         
-        ReadBackVersion1xx(dataMem);
+        ReadBackVersion0xx(dataMem, version, hash);
     }
 
-    private void ReadBackVersion1xx(Memory<byte> data)
+    private void ReadBackVersion0xx(Memory<byte> data, int version, uint hash)
     {
-        var particleDataLen = BitConverter.ToInt32(data.Slice(4, 4).Span);
-        ParticleData = data.Slice(8, particleDataLen); 
+        var pos = 4;
+        var particleDataLen = BitConverter.ToInt32(data.Slice(pos, 4).Span);
+        pos += 4;
+        if (Version >= 2) // Version 2 introduced the particle type lookup table and CRC hashes.
+        {
+            var (dict, dictLen) = SerializationHelpers.DeserializeTypeDict(data.Slice(pos).Span);
+            var nameTypeDict = Enum.GetValues<ParticleType>().ToDictionary(x => Enum.GetName(x)!, x => x);
+
+            var finalDict = new Dictionary<ushort, ParticleType>();
+            foreach (var (key, value) in nameTypeDict)
+            {
+                if (!dict.ContainsKey(key))
+                    continue;
+                
+                finalDict.Add(dict[key], value);
+            }
+
+            _particleTypeTable = finalDict;
+            pos += dictLen;
+        }
+        
+        ParticleData = data.Slice(pos, particleDataLen); 
+        Logger.InfoS("save", $"Read {particleDataLen} bytes of particle data.");
     }
 
     public Particle[] ReadParticleData()
@@ -73,10 +110,11 @@ public sealed class SaveData
 
         while (pos < ParticleData.Length)
         {
-            particles.Add(new Particle(pdSpan.Slice(pos, Particle.ParticleSaveSize), Version));
+            particles.Add(new Particle(pdSpan.Slice(pos, Particle.ParticleSaveSize), Version, _particleTypeTable));
             pos += Particle.ParticleSaveSize;
         }
 
+        Logger.InfoS("save", $"Read {particles.Count} particles from file.");
         return particles.ToArray();
     }
 }

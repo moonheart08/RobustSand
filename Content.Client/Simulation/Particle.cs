@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
+using Robust.Shared.Utility;
 
 namespace Content.Client.Simulation;
 
@@ -69,10 +72,21 @@ public struct Particle
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="saveVersion"></param>
-    public Particle(Span<byte> buffer, int saveVersion)
+    public Particle(Span<byte> buffer, int saveVersion, Dictionary<ushort, ParticleType>? particleTypeTable)
     {
         var pos = 0;
-        Type = (ParticleType) BitConverter.ToInt16(buffer.Slice(pos, 2));
+        var rawType = BitConverter.ToUInt16(buffer.Slice(pos, 2));
+        if (particleTypeTable == null)
+            Type = (ParticleType) rawType;
+        else if (particleTypeTable.ContainsKey(rawType))
+        {
+            Type = particleTypeTable[rawType];
+        }
+        else
+        {
+            Type = ParticleType.Sand; // Welp, we somehow got a nonexistent element. Convert it to sand so we can still load the save.
+        }
+        DebugTools.Assert(Type < ParticleType.End, $"Expected a valid type and got {(ushort)Type}");
         pos += 2;
         Position.X = BitConverter.ToSingle(buffer.Slice(pos + 0, 4));
         Position.Y = BitConverter.ToSingle(buffer.Slice(pos + 4, 4));
