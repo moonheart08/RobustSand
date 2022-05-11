@@ -34,10 +34,7 @@ public sealed class EntryPoint : GameClient
         IoCManager.Resolve<ILocalizationManager>()
             .LoadCulture(new CultureInfo(_cfgManager.GetCVar(GameConfigVars.GameLocale)));
         
-        _cfgManager.SetCVar("display.width", 512);
-        _cfgManager.SetCVar("display.height", 512 + 64);
-        _cfgManager.SetCVar("display.gpu_preference", 1);
-        _cfgManager.SetCVar("display.uiScale", 1.0f);
+        _cfgManager.SetCVar("display.uiScale", 0.0f);
     }
 
     public override void Init()
