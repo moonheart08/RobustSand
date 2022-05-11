@@ -129,6 +129,7 @@ public sealed partial class SimulationControl : Control
         if (Accumulator > UpdateRate)
         {
             Accumulator -= UpdateRate;
+            _simSys.UpdateA(args.DeltaSeconds);
             Update();
         }
     }
