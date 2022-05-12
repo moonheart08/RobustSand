@@ -34,9 +34,6 @@ public sealed class EntryPoint : GameClient
 
         IoCManager.Resolve<ILocalizationManager>()
             .LoadCulture(new CultureInfo(_cfgManager.GetCVar(GameConfigVars.GameLocale)));
-        
-        if (_cfgManager.GetCVar<float>(CVars.DisplayUIScale) < 1.0f)
-            _cfgManager.SetCVar("display.uiScale", 1.0f);
     }
 
     public override void Init()
@@ -51,6 +48,9 @@ public sealed class EntryPoint : GameClient
         IoCManager.BuildGraph();
             
         factory.GenerateNetIds();
+        
+        if (_cfgManager.GetCVar<float>(CVars.DisplayUIScale) < 1.0f)
+            _cfgManager.SetCVar("display.uiScale", 1.0f);
 
         // DEVNOTE: This is generally where you'll be setting up the IoCManager further, like the tile manager.
     }

@@ -1,8 +1,6 @@
 ﻿<BoxContainer xmlns="https://spacestation14.io"
               xmlns:ui="clr-namespace:Content.Client.UI"
               xmlns:rendering="clr-namespace:Content.Client.Rendering"
-              VerticalExpand="True"
-              HorizontalExpand="True"
               Orientation="Horizontal"
               Align="Center">
     <!--

@@ -104,7 +104,7 @@ public sealed partial class SimulationControl : Control
     {
         base.Draw(handle);
         var rect = UIBox2
-            .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * (UIScale < 1 ? 1.0f : UIScale));
+            .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * UIScale);
         
         handle.DrawTextureRect(_renderBuffer, rect);
         for (var relX = -2; relX < 3; relX++)
@@ -118,8 +118,8 @@ public sealed partial class SimulationControl : Control
         }
         // Fire effects use point primitives.
         //handle.DrawPrimitives(DrawPrimitiveTopology.PointList, );
-        handle.DrawCircle(MousePosition, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
-        MinSize = rect.Size;
+        handle.DrawCircle(MousePosition * UIScale, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
+        MinSize = UIBox2.FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight)).Size;
     }
 
     protected override void FrameUpdate(FrameEventArgs args)
