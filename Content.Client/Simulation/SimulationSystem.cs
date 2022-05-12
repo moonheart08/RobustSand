@@ -36,6 +36,7 @@ public sealed class SimulationSystem : EntitySystem
 
     public override void Initialize()
     {
+        UpdatesOutsidePrediction = true;
         _inputManager.SetInputCommand(ContentKeyFunctions.BrushSizeUp, InputCmdHandler.FromDelegate(BrushSizeUp));
         _inputManager.SetInputCommand(ContentKeyFunctions.BrushSizeDown, InputCmdHandler.FromDelegate(BrushSizeDown));
     }
