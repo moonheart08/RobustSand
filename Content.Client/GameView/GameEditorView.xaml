@@ -27,7 +27,9 @@
     <BoxContainer Orientation="Vertical" Name="FUCK" VerticalExpand="True" Align="Center">
         <BoxContainer Orientation="Vertical" Name="BaseBox" Align="Center">
             <BoxContainer Orientation="Horizontal" Align="Center" HorizontalExpand="True">
+                <PanelContainer StyleClasses="SimulationBackground">
                 <rendering:SimulationControl Name="SimControl" Margin="8"/>
+                </PanelContainer>
             </BoxContainer>
             <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
                 <Button Name="EraseMode" Text="Erase"/>
@@ -41,7 +43,7 @@
                 <Button Name="Discord" Text="Discord" HorizontalAlignment="Right" HorizontalExpand="True"/>
             </BoxContainer>
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
-                <Label Text="0ms" Name="SimTickTime"/>
+                <Label Text="0ms" Name="SimTickTime" StyleClasses="SimulationStatus"/>
             </BoxContainer>
         </BoxContainer>
     </BoxContainer>
