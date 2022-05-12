@@ -13,5 +13,5 @@ public sealed class Wall : ParticleImplementation
     protected override Color PColor => Color.Gray;
     protected override float PRateOfGravity => 0;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid | ParticlePropertyFlag.NoTick;
 }

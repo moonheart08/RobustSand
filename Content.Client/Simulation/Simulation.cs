@@ -152,7 +152,5 @@ public sealed partial class Simulation
 
             ProcessParticleMovement(i, ref part);
         }
-        
-
     }
 }

@@ -7,6 +7,7 @@ using Robust.Client;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.State;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.GameObjects;
@@ -34,7 +35,8 @@ public sealed class EntryPoint : GameClient
         IoCManager.Resolve<ILocalizationManager>()
             .LoadCulture(new CultureInfo(_cfgManager.GetCVar(GameConfigVars.GameLocale)));
         
-        _cfgManager.SetCVar("display.uiScale", 0.0f);
+        if (_cfgManager.GetCVar<float>(CVars.DisplayUIScale) < 1.0f)
+            _cfgManager.SetCVar("display.uiScale", 1.0f);
     }
 
     public override void Init()
