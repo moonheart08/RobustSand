@@ -14,13 +14,13 @@ public sealed class Acid : ParticleImplementation
     protected override string PDescription => "An incredibly acidic acid.";
     protected override byte PWeight => 31;
     protected override Color PColor => Color.Magenta;
-    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Liquid;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
-    public override bool Spawn(ref Particle particle)
+    public override bool OnSpawn(ref Particle particle)
     {
-        base.Spawn(ref particle);
+        base.OnSpawn(ref particle);
         particle.Variable1 = 10;
         return true;
     }

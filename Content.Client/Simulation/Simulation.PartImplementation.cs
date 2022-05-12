@@ -10,6 +10,9 @@ public sealed partial class Simulation
     [Dependency] private readonly IReflectionManager _reflectionManager = default!;
     [Dependency] private readonly ISandboxHelper _sandboxHelper = default!;
 
+    /// <summary>
+    /// Index of particle implementations, by ParticleType.
+    /// </summary>
     public readonly ParticleImplementation[] Implementations;
 
     private readonly MovementType[] _movementTable;
@@ -24,8 +27,13 @@ public sealed partial class Simulation
             return impl;
         }).OrderBy(x => (int)x.Type).ToArray();
     }
-
     
+    /// <summary>
+    /// Indexes into the particle movement table to dictate interaction.
+    /// </summary>
+    /// <param name="x">The particle being moved into.</param>
+    /// <param name="y">The particle currently moving.</param>
+    /// <returns>The cached MovementType.</returns>
     public MovementType GetMovementType(ParticleType x, ParticleType y)
     {
         return _movementTable[(int) y * (int) ParticleType.End + (int) x];

@@ -79,7 +79,7 @@ public sealed partial class Simulation
         
     }
 
-    public Box2i GetChunk(int step, int x, int y)
+    private Box2i GetChunk(int step, int x, int y)
     {
         bool offsetX = step % 2 != 0;
         bool offsetY = step >= 2;

@@ -15,21 +15,21 @@ public sealed class Smoke : ParticleImplementation
     protected override float PRateOfGravity => -base.PRateOfGravity / 2;
     protected override float PMaximumVelocity => 2f;
     // TODO: if/when airsim is coded make this a gas.
-    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
     public const int SmokeLifespan = 30 * 15;
 
-    public override bool Spawn(ref Particle particle)
+    public override bool OnSpawn(ref Particle particle)
     {
         particle.Variable1 = SmokeLifespan;
         return true;
     }
 
-    public override void ChangedType(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType oldType)
+    public override void OnChangedIntoType(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType oldType)
     {
-        Spawn(ref particle); // Do the usual setup.
+        OnSpawn(ref particle); // Do the usual setup.
     }
 
     public override void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)

@@ -20,13 +20,13 @@ public sealed class Coal : ParticleImplementation
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 
-    public override bool Spawn(ref Particle particle)
+    public override bool OnSpawn(ref Particle particle)
     {
         particle.Variable1 = 480;
         return true;
     }
 
-    public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
+    public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)
     {
         self.Variable2 = 1;

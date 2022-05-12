@@ -23,7 +23,7 @@ public sealed class Gas : ParticleImplementation
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
-    public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
+    public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)
     {
         // Burn rapidly.

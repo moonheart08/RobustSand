@@ -20,7 +20,7 @@ public sealed class Void : ParticleImplementation
         return other.Type == ParticleType.Void ? MovementType.Block : MovementType.Custom;
     }
 
-    public override bool DoMovement(ref Particle self, ref Particle other, uint selfId, uint otherId, Vector2i selfPosition,
+    public override bool OnMovedInto(ref Particle self, ref Particle other, uint selfId, uint otherId, Vector2i selfPosition,
         Vector2i otherPosition, Simulation sim)
     {
         sim.DeleteParticle(otherId, otherPosition, ref other);

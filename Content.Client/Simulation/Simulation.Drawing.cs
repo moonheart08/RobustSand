@@ -74,7 +74,7 @@ public sealed partial class Simulation
 
         if (entry.Type != ParticleType.None)
         {
-            Implementations[(int)entry.Type].DrawnOn(ref Particles[entry.Id], entry.Id, pos, this, placing);
+            Implementations[(int)entry.Type].OnDrawnOver(ref Particles[entry.Id], entry.Id, pos, this, placing);
             return;
         }
 

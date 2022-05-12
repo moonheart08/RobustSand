@@ -15,5 +15,9 @@ public enum ParticleType: ushort
     Coal,
     Gas,
     Fog,
+    Oil,
+    
+    
+    // DO NOT PLACE ANY PARTICLE TYPES AFTER THIS POINT.
     End,
 }

@@ -11,7 +11,7 @@ public sealed partial class Simulation
     {
         var impl = Implementations[(int) part.Type];
 
-        if ((impl.MovementFlags & ParticleMovementFlag.Liquid) != 0 && (impl.MovementFlags & ParticleMovementFlag.Gas) == 0)
+        if ((impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0 && (impl.MovementFlags & ParticleMovementFlag.Gas) == 0)
         {
             var curPosI = part.Position.RoundedI();
 
@@ -96,7 +96,7 @@ public sealed partial class Simulation
         if (!didNotCollide)
         {
             if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
-                (impl.MovementFlags & ParticleMovementFlag.Liquid) != 0)
+                (impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0)
             {
                 var whichFirst = _random.Prob(0.5f);
                 var success = false;
@@ -142,6 +142,13 @@ public sealed partial class Simulation
         }
     }
 
+    /// <summary>
+    /// Attempt to move a particle to a new position.
+    /// </summary>
+    /// <param name="id">The ID of the particle to move.</param>
+    /// <param name="newPosition">The position to move to.</param>
+    /// <param name="part">A reference to the particle to move.</param>
+    /// <returns>Whether or not the movement succeeded.</returns>
     public bool TryMoveParticle(uint id, Vector2 newPosition, ref Particle part)
     {
         if (!SimulationBounds.Contains(newPosition.RoundedI()))
@@ -178,7 +185,7 @@ public sealed partial class Simulation
                 return true;
             case MovementType.Custom:
                 var impl = Implementations[(int) partAtNew.Type];
-                return impl.DoMovement(ref Particles[partAtNew.Id], ref part, partAtNew.Id, id, newPosition.RoundedI(),
+                return impl.OnMovedInto(ref Particles[partAtNew.Id], ref part, partAtNew.Id, id, newPosition.RoundedI(),
                     part.Position.RoundedI(), this);
             default:
                 throw new ArgumentOutOfRangeException(nameof(movement),

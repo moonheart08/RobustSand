@@ -20,9 +20,8 @@ public sealed class Fire : ParticleImplementation
     protected override float PDiffusionRate => 0.05f;
     protected override float PMaximumVelocity => 1.4f;
     // TODO: if/when airsim is coded make this a gas.
-    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid | ParticleMovementFlag.Spread;
+    protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
-
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
 
     public const int FireLifespan = 30 * 5;
@@ -38,15 +37,15 @@ public sealed class Fire : ParticleImplementation
         _fireGradient = RenderHelpers.GenerateGradient(_firePoints, _fireColors, FireLifespan+50);
     }
 
-    public override bool Spawn(ref Particle particle)
+    public override bool OnSpawn(ref Particle particle)
     {
         particle.Variable1 = _random.Next(FireLifespan-30, FireLifespan+30);
         return true;
     }
     
-    public override void ChangedType(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType oldType)
+    public override void OnChangedIntoType(ref Particle particle, uint id, Vector2i position, Simulation sim, ParticleType oldType)
     {
-        Spawn(ref particle); // Do the usual setup.
+        OnSpawn(ref particle); // Do the usual setup.
     }
 
     public override void Update(ref Particle particle, uint id, Vector2i position, Simulation sim)
@@ -73,7 +72,7 @@ public sealed class Fire : ParticleImplementation
                 if (entry.Type == ParticleType.None)
                     continue;
 
-                sim.Implementations[(int) entry.Type].Burn(ref sim.Particles[entry.Id], ref particle, entry.Id, id,
+                sim.Implementations[(int) entry.Type].OnBurned(ref sim.Particles[entry.Id], ref particle, entry.Id, id,
                     offsPos, position, sim);
                 
                 if (particle.Type != ParticleType.Fire)

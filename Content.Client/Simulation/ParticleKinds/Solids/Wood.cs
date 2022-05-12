@@ -17,7 +17,7 @@ public sealed class Wood : ParticleImplementation
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Solid | ParticlePropertyFlag.NoTick;
 
-    public override void Burn(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
+    public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)
     {
         if (_random.Prob(0.025f))
