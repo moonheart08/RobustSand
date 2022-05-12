@@ -125,11 +125,12 @@ public sealed partial class SimulationControl : Control
     protected override void FrameUpdate(FrameEventArgs args)
     {
         base.FrameUpdate(args);
+        IoCManager.Resolve<IGameTiming>().Paused = false;
         Accumulator += args.DeltaSeconds;
         if (Accumulator > UpdateRate)
         {
             Accumulator -= UpdateRate;
-            _simSys.UpdateA(args.DeltaSeconds);
+            //_simSys.UpdateA(args.DeltaSeconds);
             Update();
         }
     }

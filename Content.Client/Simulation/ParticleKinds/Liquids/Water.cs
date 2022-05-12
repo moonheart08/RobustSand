@@ -24,7 +24,7 @@ public sealed class Water : ParticleImplementation
 
     public override MovementType CanMoveThrough(ParticleImplementation other)
     {
-        return other.MovementFlags.HasFlag(ParticleMovementFlag.LiquidAcceleration) ? MovementType.Swap : base.CanMoveThrough(other);
+        return other.MovementFlags.HasFlag(ParticleMovementFlag.LiquidAcceleration)  && other.Weight >= Weight ? MovementType.Swap : base.CanMoveThrough(other);
     }
 
     public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
