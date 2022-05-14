@@ -70,7 +70,6 @@ public sealed class EntryPoint : GameClient
         IoCManager.Resolve<StylesheetManager>().Initialize();
         var inputMan = IoCManager.Resolve<IInputManager>();
         ContentContexts.SetupContexts(inputMan.Contexts);
-
     }
 
     protected override void Dispose(bool disposing)

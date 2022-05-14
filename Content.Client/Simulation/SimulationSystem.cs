@@ -24,8 +24,9 @@ public sealed class SimulationSystem : EntitySystem
     public SimulationSystem()
     {
         Simulation = new Simulation();
+        
     }
-    
+
     public override void Update(float frameTime)
     {
         SimStopWatch.Restart();
