@@ -51,7 +51,7 @@ public struct Particle
         AlreadyUpdated = false;
     }
 
-    public const int ParticleSaveSize = 34;
+    public const int ParticleSaveSize = 38;
     
     /// <summary>
     /// Serializes to the given byte buffer. Expects 64 bytes.
@@ -117,7 +117,7 @@ public struct Particle
         pos += 16;
         if (buffer.Length > pos)
         {
-            Temperature = BitConverter.ToInt32(buffer.Slice(pos + 0, 4));
+            Temperature = BitConverter.ToSingle(buffer.Slice(pos + 0, 4));
         }
         else
         {
