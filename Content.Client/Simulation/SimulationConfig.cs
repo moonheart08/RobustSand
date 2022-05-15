@@ -48,4 +48,6 @@ public static class SimulationConfig
     public const uint MaximumCollisionSteps = 4;
 
     public const uint ConcurrencyThresh = 16384;
+
+    public const float RoomTemperature = 298.16f;
 }

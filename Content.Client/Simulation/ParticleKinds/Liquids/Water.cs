@@ -17,6 +17,9 @@ public sealed class Water : ParticleImplementation
     protected override byte PWeight => 32;
     protected override Color PColor => Color.FromHex("#0077BE");
     protected override float PRateOfGravity => base.PRateOfGravity * 2;
+    protected override float PSpecificHeat => 4.182f;
+    protected override (float, ParticleType)? PLowTemperatureConversion => (273.15f, ParticleType.Ice);
+    protected override (float, ParticleType)? PHighTemperatureConversion => (373.15f, ParticleType.Steam);
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Liquid;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;

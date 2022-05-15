@@ -17,6 +17,7 @@ public sealed class Coal : ParticleImplementation
 
     protected override byte PWeight => 128;
     protected override Color PColor => Color.DarkGray;
+    protected override float PSpecificHeat => 2.09f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Spread;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 

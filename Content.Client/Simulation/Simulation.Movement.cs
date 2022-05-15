@@ -18,7 +18,7 @@ public sealed partial class Simulation
             var pos = curPosI + (impl.RateOfGravity >= 0 ?  new Vector2i(0, 1) : new Vector2i(0, -1));
             if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.None)
             {
-                var whichFirst = _random.Next() < (int.MaxValue / 2); // 50% chance.
+                var whichFirst = _random.Prob(0.5f);
                 var liquidShiftSuccess = false;
 
                 for (var i = 0; i < 2 && !liquidShiftSuccess && part.Type != ParticleType.None; i++)
@@ -37,8 +37,8 @@ public sealed partial class Simulation
         }
         else if ((impl.MovementFlags & ParticleMovementFlag.Gas) != 0)
         {
-            var xVec = _random.Next() & 3 - 1;
-            var yVec = _random.Next() & 3 - 1;
+            var xVec = _random.Next(0, 3) - 1;
+            var yVec = _random.Next(0, 3) - 1;
             var vec = new Vector2i(xVec, yVec);
             
             // We don't care if this succeeds or not.

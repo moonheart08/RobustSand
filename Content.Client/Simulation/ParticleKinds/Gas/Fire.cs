@@ -19,7 +19,7 @@ public sealed class Fire : ParticleImplementation
     protected override float PRateOfGravity => -base.PRateOfGravity / 3;
     protected override float PDiffusionRate => 0.05f;
     protected override float PMaximumVelocity => 1.4f;
-    // TODO: if/when airsim is coded make this a gas.
+    protected override float PSpecificHeat => 2.85f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
@@ -40,6 +40,7 @@ public sealed class Fire : ParticleImplementation
     public override bool OnSpawn(ref Particle particle)
     {
         particle.Variable1 = _random.Next(FireLifespan-30, FireLifespan+30);
+        particle.Temperature = 540f;
         return true;
     }
     

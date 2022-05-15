@@ -52,10 +52,10 @@ public sealed partial class Simulation
     
     public Task? RedrawTask { get; set; }
 
-    public void RunFrame()
+    public bool RunFrame()
     {
-        if (Paused || !(RedrawTask?.IsCompleted ?? true))
-            return;
+        if (Paused || RedrawTask != null)
+            return false;
         
         CleanupNewFrame();
         //UpdateParticles(SimulationBounds);
@@ -86,6 +86,8 @@ public sealed partial class Simulation
         }
 
         RedrawTask = Task.Run(DrawNewFrame);
+
+        return true;
     }
 
     private Box2i GetChunk(int step, int x, int y)
@@ -159,6 +161,7 @@ public sealed partial class Simulation
             if (part.Type == ParticleType.None)
                 continue;
 
+            ProcessParticleTemperature(i, ref part);
             ProcessParticleMovement(i, ref part);
         }
     }

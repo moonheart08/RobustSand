@@ -19,6 +19,7 @@ public sealed class Gas : ParticleImplementation
     protected override Color PColor => Color.GreenYellow;
 
     protected override float PRateOfGravity => 0.0f;
+    protected override float PSpecificHeat => 2.85f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Gas;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;

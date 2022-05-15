@@ -11,9 +11,12 @@ public sealed class Smoke : ParticleImplementation
     protected override string PName => "Smoke";
     protected override string PDescription => "This looks like a job for Woodsy Owl.";
     protected override byte PWeight => 14;
-    protected override Color PColor => Color.WhiteSmoke;
+    protected override Color PColor => Color.FromHex("#848884");
     protected override float PRateOfGravity => -base.PRateOfGravity / 2;
     protected override float PMaximumVelocity => 2f;
+
+    protected override float PSpecificHeat => 0.992f;
+
     // TODO: if/when airsim is coded make this a gas.
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Gas;

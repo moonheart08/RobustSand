@@ -14,8 +14,9 @@ public sealed class Wood : ParticleImplementation
     protected override byte PWeight => 255;
     protected override Color PColor => Color.BurlyWood;
     protected override float PRateOfGravity => 0;
+    protected override float PSpecificHeat => 1.7f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Solid | ParticlePropertyFlag.NoTick;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Solid;
 
     public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)

@@ -7,7 +7,7 @@ namespace Content.Client.Simulation.Saving;
 
 public sealed class SaveData
 {
-    public const int CurrentVersion = 2;
+    public const int CurrentVersion = 3;
     
     public int Version;
     public Memory<byte> ParticleData;

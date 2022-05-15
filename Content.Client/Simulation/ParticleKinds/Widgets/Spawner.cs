@@ -15,6 +15,7 @@ public sealed class Spawner : ParticleImplementation
     protected override byte PWeight => 255;
     protected override Color PColor => Color.Yellow;
     protected override float PRateOfGravity => 0;
+    protected override float PSpecificHeat => 0.0f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
 

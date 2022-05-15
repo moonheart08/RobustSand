@@ -12,12 +12,25 @@ namespace Content.Client.Simulation;
 /// </summary>
 public struct Particle
 {
+    /// <summary>
+    /// Particle position.
+    /// </summary>
     public Vector2 Position;
+    /// <summary>
+    /// Particle velocity.
+    /// </summary>
     public Vector2 Velocity;
     public int Variable1;
     public int Variable2;
     public int Variable3;
     public int Variable4;
+    /// <summary>
+    /// Temperature in kelvin.
+    /// </summary>
+    public float Temperature;
+    /// <summary>
+    /// Type of the particle.
+    /// </summary>
     public ParticleType Type = ParticleType.None;
     public bool AlreadyUpdated;
 
@@ -34,6 +47,7 @@ public struct Particle
         Variable2 = 0;
         Variable3 = 0;
         Variable4 = 0;
+        Temperature = SimulationConfig.RoomTemperature;
         AlreadyUpdated = false;
     }
 
@@ -63,6 +77,9 @@ public struct Particle
         BitConverter.TryWriteBytes(buffer.Slice(pos+8, 4), Variable3);
         BitConverter.TryWriteBytes(buffer.Slice(pos+12, 4), Variable4);
         pos += 16;
+        // Serialize our temperature.
+        BitConverter.TryWriteBytes(buffer.Slice(pos + 0, 4), Temperature);
+        pos += 4;
         // Done.
         return pos;
     }
@@ -97,6 +114,15 @@ public struct Particle
         Variable2 = BitConverter.ToInt32(buffer.Slice(pos + 4, 4));
         Variable3 = BitConverter.ToInt32(buffer.Slice(pos + 8, 4));
         Variable4 = BitConverter.ToInt32(buffer.Slice(pos + 12, 4));
+        pos += 16;
+        if (buffer.Length > pos)
+        {
+            Temperature = BitConverter.ToInt32(buffer.Slice(pos + 0, 4));
+        }
+        else
+        {
+            Temperature = SimulationConfig.RoomTemperature;
+        }
 
         AlreadyUpdated = false;
     }

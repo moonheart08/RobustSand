@@ -10,6 +10,7 @@ public sealed class None : ParticleImplementation
     protected override string PDescription => "Doesn't exist.";
     protected override byte PWeight => 0;
     protected override Color PColor => Color.SandyBrown;
+    protected override float PSpecificHeat => 0.0f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.None;
 }

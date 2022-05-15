@@ -28,9 +28,8 @@ public sealed class SimulationSystem : EntitySystem
     public override void Update(float frameTime)
     {
         SimStopWatch.Restart();
-        Simulation.RunFrame();
-
-        SimTickTime = SimStopWatch.Elapsed;
+        if (Simulation.RunFrame())
+            SimTickTime = SimStopWatch.Elapsed;
     }
 
     public override void Initialize()

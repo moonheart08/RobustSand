@@ -98,7 +98,12 @@ public sealed partial class Simulation
     public void ChangeParticleType(uint id, Vector2i position, ref Particle particle, ParticleType newType)
     {
         particle.Type = newType;
+        var impl = Implementations[(int) newType];
         Implementations[(int) newType].OnChangedIntoType(ref particle, id, position, this, particle.Type);
+        
+        if ((impl.PropertyFlags & ParticlePropertyFlag.Solid) != 0)
+            particle.Velocity = Vector2.Zero; // nuh-uh-uh, don't you dare.
+        
         SetPlayfieldEntry(position, new PlayfieldEntry(newType, id)); // Make sure particles around us get the memo.
     }
 }

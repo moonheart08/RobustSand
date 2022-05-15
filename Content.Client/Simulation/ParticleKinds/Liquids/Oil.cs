@@ -15,6 +15,7 @@ public sealed class Oil : ParticleImplementation
     protected override byte PWeight => 24;
     protected override float PRateOfGravity => base.PRateOfGravity * 1.8f;
     protected override Color PColor => Color.FromHex("#DBCF5C");
+    protected override float PSpecificHeat => 1.97f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Liquid;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;

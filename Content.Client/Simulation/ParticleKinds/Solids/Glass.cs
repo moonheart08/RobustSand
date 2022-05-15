@@ -12,6 +12,7 @@ public sealed class Glass : ParticleImplementation
     protected override byte PWeight => 255;
     protected override Color PColor => Color.LightSkyBlue;
     protected override float PRateOfGravity => 0;
+    protected override float PSpecificHeat => .840f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
-    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Solid | ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.NoTick;
+    protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.Solid | ParticlePropertyFlag.AcidResistant;
 }

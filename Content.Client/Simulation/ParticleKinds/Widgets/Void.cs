@@ -12,6 +12,7 @@ public sealed class Void : ParticleImplementation
     protected override byte PWeight => 255;
     protected override Color PColor => Color.Maroon;
     protected override float PRateOfGravity => 0.0f;
+    protected override float PSpecificHeat => 0.0f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.None;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Solid;
 

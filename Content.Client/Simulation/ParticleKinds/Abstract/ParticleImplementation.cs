@@ -79,6 +79,22 @@ public abstract class ParticleImplementation
     public readonly float MaximumVelocity;
 
     /// <summary>
+    /// The specific heat of the particle. Stored in kJ/(kg K)
+    /// </summary>
+    protected abstract float PSpecificHeat { get; }
+    
+    [ViewVariables(VVAccess.ReadWrite)]
+    public readonly float SpecificHeat;
+
+    protected virtual (float temperature, ParticleType type)? PHighTemperatureConversion { get; } = null;
+
+    public readonly (float temperature, ParticleType type)? HighTemperatureConversion;
+    
+    protected virtual (float temperature, ParticleType type)? PLowTemperatureConversion { get; } = null;
+    
+    public readonly (float temperature, ParticleType type)? LowTemperatureConversion;
+    
+    /// <summary>
     /// Movement flags for a particle, controlling how it moves.
     /// </summary>
     protected abstract ParticleMovementFlag PMovementFlags { get; }
@@ -114,6 +130,9 @@ public abstract class ParticleImplementation
         RateOfGravity = PRateOfGravity;
         BounceCoefficient = PBounceCoefficient;
         MaximumVelocity = PMaximumVelocity;
+        SpecificHeat = PSpecificHeat;
+        HighTemperatureConversion = PHighTemperatureConversion;
+        LowTemperatureConversion = PLowTemperatureConversion;
         MovementFlags = PMovementFlags;
         PropertyFlags = PPropertyFlags;
         DiffusionRate = PDiffusionRate;

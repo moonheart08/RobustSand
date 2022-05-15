@@ -14,6 +14,7 @@ public sealed class Acid : ParticleImplementation
     protected override string PDescription => "An incredibly acidic acid.";
     protected override byte PWeight => 31;
     protected override Color PColor => Color.Magenta;
+    protected override float PSpecificHeat => 3.14f;
     protected override ParticleMovementFlag PMovementFlags => ParticleMovementFlag.Liquid;
     protected override ParticlePropertyFlag PPropertyFlags => ParticlePropertyFlag.AcidResistant | ParticlePropertyFlag.Liquid;
     protected override ParticleRenderFlag PParticleRenderFlags => ParticleRenderFlag.Blob;
