@@ -37,7 +37,7 @@ public sealed partial class GameEditorView : BoxContainer
 
         EraseMode.OnPressed += args =>
         {
-            _simSys.Placing = ParticleType.None;
+            SimControl.Sim.Placing = ParticleType.None;
         };
 
         Clear.OnPressed += args =>
@@ -85,7 +85,7 @@ public sealed partial class GameEditorView : BoxContainer
 
             placeButton.OnPressed += args =>
             {
-                _simSys.Placing = impl.Type;
+                SimControl.Sim.Placing = impl.Type;
             };
             
             ElementPlaceButtons.AddChild(placeButton);

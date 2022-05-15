@@ -7,6 +7,7 @@ namespace Content.Client.Simulation;
 public sealed partial class Simulation
 {
     public uint DrawingRadius = 2;
+    public ParticleType Placing = ParticleType.Sand;
     
     public void Draw(Vector2i start, Vector2i end, ParticleType placing)
     {

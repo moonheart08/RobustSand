@@ -7,6 +7,8 @@ using Content.Client.Simulation.ParticleKinds.Abstract;
 using Robust.Shared.Maths;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Content.Client.Simulation;
 
@@ -33,6 +35,11 @@ public sealed partial class Simulation
         IoCManager.InjectDependencies(this);
         Implementations = InitializeImplementations();
         _movementTable = InitializeMovementTable();
+        
+        _bufferClear = new Image<Rgba32>((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight, new Rgba32(0, 0, 0, 0));
+        BaseFrame = _bufferClear.Clone();
+        LiquidFrame = _bufferClear.Clone();
+        _bufferFrameBox = UIBox2i.FromDimensions(Vector2i.Zero, new Vector2i((int)SimulationConfig.SimWidth, (int)SimulationConfig.SimHeight));
 
         DebugTools.Assert(SimulationBounds.Contains(Vector2i.Zero));
         DebugTools.Assert(SimulationBounds.Contains(new Vector2i((int)SimulationConfig.SimWidth-1, (int)SimulationConfig.SimHeight-1)));
@@ -42,12 +49,14 @@ public sealed partial class Simulation
     }
     
     private Task[] _tasks = new Task[(SimulationConfig.SimWidthChunks / 2) * (SimulationConfig.SimHeightChunks / 2)];
+    
+    public Task? RedrawTask { get; set; }
 
     public void RunFrame()
     {
-        if (Paused)
+        if (Paused || !(RedrawTask?.IsCompleted ?? true))
             return;
-
+        
         CleanupNewFrame();
         //UpdateParticles(SimulationBounds);
 
@@ -55,28 +64,28 @@ public sealed partial class Simulation
         {
             // just update the whole playfield and be done with it.
             UpdateParticles(SimulationBounds);
-            return;
         }
-        
-        
-
-        var idx = 0;
-        for (var step = 0; step < 4; step++)
+        else
         {
-            for (var x = 0; x < (SimulationConfig.SimWidthChunks / 2); x++)
+            var idx = 0;
+            for (var step = 0; step < 4; step++)
             {
-                for (var y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
+                for (var x = 0; x < (SimulationConfig.SimWidthChunks / 2); x++)
                 {
-                    var chunk = GetChunk(step, x, y);
-                    _tasks[idx] = Task.Run(() => UpdateParticles(chunk));
-                    idx++;
+                    for (var y = 0; y < (SimulationConfig.SimHeightChunks / 2); y++)
+                    {
+                        var chunk = GetChunk(step, x, y);
+                        _tasks[idx] = Task.Run(() => UpdateParticles(chunk));
+                        idx++;
+                    }
                 }
+
+                Task.WaitAll(_tasks);
+                idx = 0;
             }
-            Task.WaitAll(_tasks);
-            idx = 0;
         }
 
-        
+        RedrawTask = Task.Run(DrawNewFrame);
     }
 
     private Box2i GetChunk(int step, int x, int y)

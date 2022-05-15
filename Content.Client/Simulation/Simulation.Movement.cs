@@ -18,7 +18,7 @@ public sealed partial class Simulation
             var pos = curPosI + (impl.RateOfGravity >= 0 ?  new Vector2i(0, 1) : new Vector2i(0, -1));
             if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.None)
             {
-                var whichFirst = _random.Prob(0.5f);
+                var whichFirst = _random.Next() < (int.MaxValue / 2); // 50% chance.
                 var liquidShiftSuccess = false;
 
                 for (var i = 0; i < 2 && !liquidShiftSuccess && part.Type != ParticleType.None; i++)
@@ -37,8 +37,8 @@ public sealed partial class Simulation
         }
         else if ((impl.MovementFlags & ParticleMovementFlag.Gas) != 0)
         {
-            var xVec = _random.Next(0, 3) - 1;
-            var yVec = _random.Next(0, 3) - 1;
+            var xVec = _random.Next() & 3 - 1;
+            var yVec = _random.Next() & 3 - 1;
             var vec = new Vector2i(xVec, yVec);
             
             // We don't care if this succeeds or not.
@@ -65,7 +65,7 @@ public sealed partial class Simulation
             return;
         }
 
-        bool didNotCollide = false;
+        var didNotCollide = false;
         var rawVelocity = (newPos - oldPos).Length;
         if (rawVelocity < 1.5 || !SimulationBounds.Contains(newPos.RoundedI()))
         {
@@ -87,58 +87,58 @@ public sealed partial class Simulation
             newPos = acc;
         }
         
+        if (didNotCollide) return;
+        
         if (part.Type == ParticleType.None || !SimulationBounds.Contains(newPos.RoundedI()))
             return;
 
         var collidee = GetPlayfieldEntry(newPos.RoundedI());
         var otherImpl = Implementations[(int)collidee.Type];
-
-        if (!didNotCollide)
+        
+        
+        if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
+            (impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0)
         {
-            if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
-                (impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0)
+            var whichFirst = _random.Prob(0.5f);
+            var success = false;
+            for (var i = 0; i < 2 && !success && part.Type != ParticleType.None; i++)
             {
-                var whichFirst = _random.Prob(0.5f);
-                var success = false;
-                for (var i = 0; i < 2 && !success && part.Type != ParticleType.None; i++)
+                if (whichFirst)
                 {
-                    if (whichFirst)
-                    {
-                        success = TryMoveParticle(id, newPos + Vector2.UnitX, ref part);
-                    }
-                    else
-                    {
-                        success = TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
-                    }
-                    whichFirst = !whichFirst;
+                    success = TryMoveParticle(id, newPos + Vector2.UnitX, ref part);
                 }
-
-                if (!didNotCollide)
+                else
                 {
-                    
-                    if ((otherImpl.PropertyFlags & ParticlePropertyFlag.Solid) != 0)
-                        part.Velocity = Vector2.Zero;
-                    else
-                    {
-                        var oldVel = part.Velocity;
-                        ref var otherPart = ref Particles[collidee.Id];
-                        // TODO: Account for weight in this.
-                        otherPart.Velocity += oldVel * (1 - impl.BounceCoefficient);
-                        var newVel = oldVel * impl.BounceCoefficient;
-                        if (otherPart.Position.X > part.Position.X)
-                            newVel.X = -newVel.X;
-                        else
-                            newVel.Y = -newVel.Y;
-                        part.Velocity = newVel.ClampMagnitude(impl.MaximumVelocity);
-                    }
-
+                    success = TryMoveParticle(id, newPos - Vector2.UnitX, ref part);
                 }
+                whichFirst = !whichFirst;
             }
 
-            if (impl.MovementFlags == ParticleMovementFlag.None)
+            if (!didNotCollide)
             {
-                part.Velocity = Vector2.Zero;
+                
+                if ((otherImpl.PropertyFlags & ParticlePropertyFlag.Solid) != 0)
+                    part.Velocity = Vector2.Zero;
+                else
+                {
+                    var oldVel = part.Velocity;
+                    ref var otherPart = ref Particles[collidee.Id];
+                    // TODO: Account for weight in this.
+                    otherPart.Velocity += oldVel * (1 - impl.BounceCoefficient);
+                    var newVel = oldVel * impl.BounceCoefficient;
+                    if (otherPart.Position.X > part.Position.X)
+                        newVel.X = -newVel.X;
+                    else
+                        newVel.Y = -newVel.Y;
+                    part.Velocity = newVel.ClampMagnitude(impl.MaximumVelocity);
+                }
+
             }
+        }
+
+        if (impl.MovementFlags == ParticleMovementFlag.None)
+        {
+            part.Velocity = Vector2.Zero;
         }
     }
 

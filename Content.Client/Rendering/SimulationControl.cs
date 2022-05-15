@@ -26,7 +26,7 @@ public sealed partial class SimulationControl : Control
 
     public float Accumulator = 0;
 
-    public SimulationSystem _simSys;
+    public Simulation.Simulation Sim;
 
     public Vector2i MousePosition;
 
@@ -38,27 +38,20 @@ public sealed partial class SimulationControl : Control
 
     private OwnedTexture _liquidBuffer;
 
+    private Task? _frameRedrawTask;
+
     public SimulationControl()
     {
         IoCManager.InjectDependencies(this);
-        _simSys = _entitySystemManager.GetEntitySystem<SimulationSystem>();
+        Sim = _entitySystemManager.GetEntitySystem<SimulationSystem>().Simulation;
         AlwaysRender = true;
         _renderBuffer = _clyde.CreateBlankTexture<Rgba32>(
             new Vector2i((int) SimulationConfig.SimWidth, (int) SimulationConfig.SimHeight), "simbuffer",
             TextureLoadParameters.Default);
         _liquidBuffer = _clyde.CreateBlankTexture<Rgba32>(_renderBuffer.Size, "simbuffer");
-        _bufferClear = new Image<Rgba32>(_renderBuffer.Width, _renderBuffer.Height, new Rgba32(0, 0, 0, 0));
-        _newFrame = _bufferClear.Clone();
-        _liquidFrame = _bufferClear.Clone();
-        _bufferFrameBox = UIBox2i.FromDimensions(Vector2i.Zero, _renderBuffer.Size);
         MouseFilter = MouseFilterMode.Stop;
     }
 
-    public void Update()
-    {
-        DrawNewFrame();
-    }
-    
     protected override void KeyBindDown(GUIBoundKeyEventArgs args)
     {
         if (args.Function == EngineKeyFunctions.UIClick)
@@ -74,18 +67,18 @@ public sealed partial class SimulationControl : Control
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         var pos = args.RelativePosition.RoundedI();
-        if (!_simSys.Simulation.SimulationBounds.Contains(pos))
+        if (!Sim.SimulationBounds.Contains(pos))
             return;
         MousePosition = pos;
 
         if (_currentlyDrawing)
         {
-            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), _simSys.Placing);
+            Sim.Draw(pos, pos + args.Relative.RoundedI(), Sim.Placing);
         }
 
         if (_currentlyErasing)
         {
-            _simSys.Simulation.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.None);
+            Sim.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.None);
         }
     }
 
@@ -103,6 +96,14 @@ public sealed partial class SimulationControl : Control
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
+
+        if (Sim.RedrawTask?.IsCompleted ?? false)
+        {
+            _renderBuffer.SetSubImage(Vector2i.Zero, Sim.BaseFrame);
+            _liquidBuffer.SetSubImage(Vector2i.Zero, Sim.LiquidFrame);
+            Sim.RedrawTask = null;
+        }
+
         var rect = UIBox2
             .FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight) * UIScale);
         
@@ -118,19 +119,7 @@ public sealed partial class SimulationControl : Control
         }
         // Fire effects use point primitives.
         //handle.DrawPrimitives(DrawPrimitiveTopology.PointList, );
-        handle.DrawCircle(MousePosition * UIScale, _simSys.Simulation.DrawingRadius, Color.Yellow, false);
+        handle.DrawCircle(MousePosition * UIScale, Sim.DrawingRadius, Color.Yellow, false);
         MinSize = UIBox2.FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight)).Size;
-    }
-
-    protected override void FrameUpdate(FrameEventArgs args)
-    {
-        base.FrameUpdate(args);
-        Accumulator += args.DeltaSeconds;
-        if (Accumulator > UpdateRate)
-        {
-            Accumulator -= UpdateRate;
-            //_simSys.UpdateA(args.DeltaSeconds);
-            Update();
-        }
     }
 }

@@ -33,12 +33,10 @@ public sealed class Acid : ParticleImplementation
             return;
         }
 
-        for (int relX = -1; relX <= 1; relX++)
+        for (var relX = -1; relX <= 1; relX++)
         {
-            for (int relY = -1; relY <= 1; relY++)
+            for (var relY = -1; relY <= 1; relY++)
             {
-                if (_random.Prob(0.25f))
-                    continue;
                 var offsPos = position + new Vector2i(relX, relY);
                 
                 if (!sim.SimulationBounds.Contains(offsPos))
@@ -46,10 +44,13 @@ public sealed class Acid : ParticleImplementation
 
                 var entry = sim.GetPlayfieldEntry(offsPos);
                 
-                if (entry.Type == ParticleType.None)
+                if (entry.Type is ParticleType.None or ParticleType.Acid)
                     continue;
                 
                 if ((sim.Implementations[(int)entry.Type].PropertyFlags & ParticlePropertyFlag.AcidResistant) != 0)
+                    continue;
+                
+                if (_random.Prob(0.25f))
                     continue;
                 
                 sim.DeleteParticle(entry.Id, offsPos, ref sim.Particles[entry.Id]);
