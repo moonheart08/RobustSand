@@ -57,9 +57,11 @@ public sealed partial class SimulationControl : Control
         if (args.Function == EngineKeyFunctions.UIClick)
         {
             _currentlyDrawing = true;
+            Sim.DrawBrush(args.RelativePosition.RoundedI(), Sim.Placing);
         } else if (args.Function == EngineKeyFunctions.UIRightClick)
         {
             _currentlyErasing = true;
+             Sim.DrawBrush(args.RelativePosition.RoundedI(), ParticleType.None);
         }
     }
 
