@@ -75,12 +75,12 @@ public sealed partial class SimulationControl : Control
 
         if (_currentlyDrawing)
         {
-            Sim.Draw(pos, pos + args.Relative.RoundedI(), Sim.Placing);
+            Sim.Draw(pos - args.Relative.RoundedI(), pos, Sim.Placing);
         }
 
         if (_currentlyErasing)
         {
-            Sim.Draw(pos, pos + args.Relative.RoundedI(), ParticleType.None);
+            Sim.Draw(pos - args.Relative.RoundedI(), pos, ParticleType.None);
         }
     }
 
