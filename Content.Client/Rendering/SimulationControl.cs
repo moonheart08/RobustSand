@@ -122,4 +122,9 @@ public sealed partial class SimulationControl : Control
         handle.DrawCircle(MousePosition * UIScale, Sim.DrawingRadius, Color.Yellow, false);
         MinSize = UIBox2.FromDimensions(Vector2.Zero, new Vector2(SimulationConfig.SimWidth, SimulationConfig.SimHeight)).Size;
     }
+
+    protected override void FrameUpdate(FrameEventArgs args)
+    {
+        Sim = _entitySystemManager.GetEntitySystem<SimulationSystem>().Simulation;
+    }
 }
