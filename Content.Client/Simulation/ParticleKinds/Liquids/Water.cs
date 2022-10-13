@@ -33,7 +33,10 @@ public sealed class Water : ParticleImplementation
     public override void OnBurned(ref Particle self, ref Particle fire, uint selfId, uint fireId, Vector2i selfPosition, Vector2i firePosition,
         Simulation sim)
     {
-        // Smother it.
-        sim.DeleteParticle(fireId, firePosition, ref fire);
+        if (fire.Type == ParticleType.Fire)
+        {
+            // Smother it.
+            sim.DeleteParticle(fireId, firePosition, ref fire);
+        }
     }
 }

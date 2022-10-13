@@ -11,6 +11,7 @@ using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Maths;
+using Robust.Shared.Sandboxing;
 
 namespace Content.Client.GameView;
 
@@ -18,7 +19,11 @@ namespace Content.Client.GameView;
 public sealed partial class GameEditorView : BoxContainer
 {
     [Dependency] private readonly IEntitySystemManager _entitySystemManager = default!;
+    [Dependency] private readonly ISandboxHelper _sandboxHelper = default!;
     private SimulationSystem _simSys = default!;
+
+    private ParticleType? _currentlyAnalyzing = null;
+    private Control? _analyzerControl = null;
 
     public GameEditorView()
     {
@@ -95,7 +100,34 @@ public sealed partial class GameEditorView : BoxContainer
     protected override void Draw(DrawingHandleScreen handle)
     {
         this.MinSize = IoCManager.Resolve<IClyde>().MainWindow.Size;
-        SimTickTime.Text = $"{_simSys.SimTickTime.TotalMilliseconds:F3} ms, {_simSys.Simulation.LiveParticles} particles, {SimControl.MousePosition}";
+        var sim = _simSys.Simulation;
+        SimTickTime.Text = $"{_simSys.SimTickTime.TotalMilliseconds:F3} ms, {sim.LiveParticles} particles, {SimControl.MousePosition}";
+        var partAtMouse = sim.GetPlayfieldEntry(SimControl.MousePosition);
+        
+        if (partAtMouse.Type == ParticleType.None)
+        {
+            ParticleAnalyzer.RemoveAllChildren();
+            _analyzerControl = null;
+            _currentlyAnalyzing = null;
+            FUCK.MinHeight = MinSize.Y;
+            base.Draw(handle);
+            return;
+        }
+        
+        if (partAtMouse.Type != _currentlyAnalyzing)
+        {
+            ParticleAnalyzer.RemoveAllChildren();
+            _analyzerControl = (Control) _sandboxHelper.CreateInstance(sim.Implementations[(int) partAtMouse.Type].ParticleAnalyzeControl);
+            ParticleAnalyzer.AddChild(_analyzerControl);
+            foreach (var style in ParticleAnalyzer.StyleClasses)
+            {
+                _analyzerControl.AddStyleClass(style);
+            }
+            _currentlyAnalyzing = partAtMouse.Type;
+        }
+        
+        sim.Implementations[(int) partAtMouse.Type].Analyze(ref sim.Particles[partAtMouse.Id], sim, _analyzerControl);
+
         FUCK.MinHeight = MinSize.Y;
         base.Draw(handle);
     }

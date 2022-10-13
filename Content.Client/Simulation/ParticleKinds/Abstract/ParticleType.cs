@@ -20,6 +20,9 @@ public enum ParticleType: ushort
     Ice,
     Metal,
     Steam,
+    Oxygen,
+    Lava,
+    Stone,
     
     // DO NOT PLACE ANY PARTICLE TYPES AFTER THIS POINT.
     End,

@@ -76,8 +76,8 @@ public sealed class Fire : ParticleImplementation
                 sim.Implementations[(int) entry.Type].OnBurned(ref sim.Particles[entry.Id], ref particle, entry.Id, id,
                     offsPos, position, sim);
                 
-                if (particle.Type != ParticleType.Fire)
-                    return; // We can't burn things if we're not fire. May also have been deleted.
+                if (particle.Type != Type)
+                    return; // We can't burn things if we're not the correct type.
             }
         }
     }

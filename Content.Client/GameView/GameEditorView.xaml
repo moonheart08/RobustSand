@@ -42,6 +42,7 @@
             </BoxContainer>
             <BoxContainer Orientation="Vertical" VerticalExpand="True" Name="InfoBox">
                 <Label Text="0ms" Name="SimTickTime" StyleClasses="SimulationStatus"/>
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True" Name="ParticleAnalyzer" MinHeight="64" StyleClasses="SimulationStatus"></BoxContainer>
             </BoxContainer>
         </BoxContainer>
     </BoxContainer>

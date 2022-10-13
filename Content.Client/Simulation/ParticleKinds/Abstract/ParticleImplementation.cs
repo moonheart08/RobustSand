@@ -1,4 +1,7 @@
 ﻿using System;
+using Content.Client.Rendering;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.ViewVariables;
 
@@ -71,8 +74,9 @@ public abstract class ParticleImplementation
     public readonly float BounceCoefficient;
 
     /// <summary>
-    /// The maximum velocity (pixles per tick) this particle is allowed to has. 
+    /// The maximum velocity (pixels per tick) this particle is allowed to has. 
     /// </summary>
+    
     protected virtual float PMaximumVelocity { get; } = 4.0f;
 
     [ViewVariables(VVAccess.ReadWrite)]
@@ -249,6 +253,17 @@ public abstract class ParticleImplementation
         Vector2i selfPosition, Vector2i otherPosition, Simulation sim)
     {
         throw new NotImplementedException();
+    }
+
+    public virtual Type ParticleAnalyzeControl => typeof(BasicAnalyzer);
+
+    public virtual void Analyze(ref Particle self, Simulation sim, Control? control)
+    {
+        if (control is BasicAnalyzer label)
+        {
+            label.particle = self;
+            label.sim = sim;
+        }
     }
 }
 
