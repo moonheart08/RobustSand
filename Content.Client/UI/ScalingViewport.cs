@@ -275,6 +275,26 @@ namespace Content.Client.UI;
             return matrix.Transform(vpLocal);
         }
 
+        public Matrix3 GetWorldToScreenMatrix()
+        {
+            EnsureViewportCreated();
+            return _viewport!.GetWorldToLocalMatrix() * GetLocalToScreenMatrix();
+        }
+
+        public Matrix3 GetLocalToScreenMatrix()
+        {
+            EnsureViewportCreated();
+
+            var drawBox = GetDrawBox();
+            var scaleFactor = drawBox.Size / (Vector2) _viewport!.Size;
+
+            if (scaleFactor.X == 0 || scaleFactor.Y == 0)
+                // Basically a nonsense scenario, at least make sure to return something that can be inverted.
+                return Matrix3.Identity;
+
+            return Matrix3.CreateTransform(GlobalPixelPosition + drawBox.TopLeft, 0, scaleFactor);
+        }
+
         private Matrix3 LocalToScreenMatrix()
         {
             DebugTools.AssertNotNull(_viewport);

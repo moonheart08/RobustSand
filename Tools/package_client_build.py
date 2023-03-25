@@ -86,6 +86,7 @@ def build(skip_build: bool) -> None:
             "/v:m",
             "/t:Rebuild",
             "/p:FullRelease=True",
+            "/p:PublishTrimmed=True"
             "/m"
         ], check=True)
 

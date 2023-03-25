@@ -16,7 +16,12 @@ public sealed partial class Simulation
             var curPosI = part.Position.RoundedI();
 
             var pos = curPosI + (impl.RateOfGravity >= 0 ?  new Vector2i(0, 1) : new Vector2i(0, -1));
-            if (SimulationBounds.Contains(pos) && GetPlayfieldEntry(pos).Type != ParticleType.None)
+
+            if (!SimulationBounds.Contains(pos))
+                goto failed; 
+            var partAtField = GetPlayfieldEntry(pos);
+            var pafImpl = Implementations[(int) partAtField.Type];
+            if (partAtField.Type != ParticleType.None && (pafImpl.MovementFlags & ParticleMovementFlag.Gas) == 0)
             {
                 var whichFirst = _random.Prob(0.5f);
                 var liquidShiftSuccess = false;
@@ -32,6 +37,7 @@ public sealed partial class Simulation
             }
             else
             {
+                
                 part.Velocity += new Vector2(0, impl.RateOfGravity);
             }
         }
@@ -50,6 +56,7 @@ public sealed partial class Simulation
         {
             part.Velocity += new Vector2(0, impl.RateOfGravity);
         }
+        failed:
         
         part.Velocity = part.Velocity.ClampMagnitude(impl.MaximumVelocity);
         
@@ -96,8 +103,8 @@ public sealed partial class Simulation
         var otherImpl = Implementations[(int)collidee.Type];
         
         
-        if ((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
-            (impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0)
+        if (((impl.MovementFlags & ParticleMovementFlag.Spread) != 0 || 
+            (impl.MovementFlags & ParticleMovementFlag.LiquidAcceleration) != 0) && (otherImpl.MovementFlags & ParticleMovementFlag.Gas) == 0)
         {
             var whichFirst = _random.Prob(0.5f);
             var success = false;

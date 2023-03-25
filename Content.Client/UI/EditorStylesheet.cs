@@ -16,9 +16,9 @@ public sealed class EditorStylesheet : StylesheetBase
     {
         var res = IoCManager.Resolve<IResourceCache>();
         var textureCloseButton = res.GetResource<TextureResource>("/Textures/cross.png").Texture;
-        var notoSansFont = res.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf");
-        var notoSansFont10 = new VectorFont(notoSansFont, 10);
-        var notoSansFont12 = new VectorFont(notoSansFont, 12);
+        var gameFont = res.GetResource<FontResource>("/Fonts/Allerta-Regular.ttf");
+        var gameFont10 = new VectorFont(gameFont, 10);
+        var gameFont12 = new VectorFont(gameFont, 12);
 
         var scrollBarNormal = new StyleBoxFlat {
             BackgroundColor = Color.Gray.WithAlpha(0.35f), ContentMarginLeftOverride = 10,
@@ -47,7 +47,7 @@ public sealed class EditorStylesheet : StylesheetBase
 
             // Default font.
             Element()
-                .Prop("font", notoSansFont12)
+                .Prop("font", gameFont12)
                 .Prop("font-color", Color.Black),
             
             Element<Label>().Class("SimulationStatus")
@@ -159,7 +159,7 @@ public sealed class EditorStylesheet : StylesheetBase
                 .Prop(TabContainer.StylePropertyTabStyleBoxInactive, new StyleBoxFlat {
                     BackgroundColor = Color.FromHex("#D0D0D0"), PaddingLeft = 1, PaddingRight = 1, ContentMarginLeftOverride = 5, ContentMarginRightOverride = 5
                 })
-                .Prop("font", notoSansFont10),
+                .Prop("font", gameFont10),
 
         });
     }

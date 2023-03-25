@@ -14,7 +14,7 @@ public sealed class GameEditorState : State
     private IUserInterfaceManager _userInterface = default!;
     private readonly GameEditorView _view = new();
     
-    public override void Startup()
+    protected override void Startup()
     {
         _userInterface = IoCManager.Resolve<IUserInterfaceManager>();
         _userInterface.StateRoot.AddChild(_view);
@@ -33,7 +33,7 @@ public sealed class GameEditorState : State
         configurationManager.SetCVar("display.uiScale", Math.Max(Math.Min(scale.X, scale.Y), 1.0f));
     }
 
-    public override void Shutdown()
+    protected override void Shutdown()
     {
         _userInterface.StateRoot.RemoveChild(_view);
     }
